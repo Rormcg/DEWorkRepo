@@ -1,4 +1,6 @@
-
+/**
+ * @author Rory McGuire
+ */
 
 import java.util.Scanner;
 import java.io.FileNotFoundException;
@@ -8,7 +10,7 @@ import java.io.File;
 public class MatchingBraces {
 	
 	public static void main(String[] args) {
-		System.out.println(scanFile("TestFile"));
+		System.out.println(scanFile("/MatchingBraces/src/TestFile.txt"));
 	}
 	
 	public static boolean scanFile(String filename) {
@@ -19,7 +21,7 @@ public class MatchingBraces {
 		try {
 			s = new Scanner(f);
 		} catch(FileNotFoundException e) {
-			System.out.println("File not Found");
+			System.out.println(filename + " not Found");
 		}
 		
 		
@@ -34,11 +36,14 @@ public class MatchingBraces {
 					if(numBraces > 0) {
 						numBraces --;
 					} else {
+						s.close();
 						return false;
 					}
 				}
 			}
 		}
+		
+		s.close();
 		
 		return numBraces == 0;
 	}
