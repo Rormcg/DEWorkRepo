@@ -7,6 +7,9 @@ import java.io.File;
 
 public class MatchingBraces {
 	
+	public static void main(String[] args) {
+		System.out.println(scanFile("TestFile"));
+	}
 	
 	public static boolean scanFile(String filename) {
 		File f = null;
