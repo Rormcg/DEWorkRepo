@@ -16,7 +16,7 @@ public class MatchingBraces {
 		try {
 			s = new Scanner(f);
 		} catch(FileNotFoundException e) {
-			System.out.println("File not Found")
+			System.out.println("File not Found");
 		}
 		
 		
