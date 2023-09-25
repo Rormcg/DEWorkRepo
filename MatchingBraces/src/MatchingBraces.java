@@ -10,18 +10,21 @@ import java.io.File;
 public class MatchingBraces {
 	
 	public static void main(String[] args) {
-		System.out.println(scanFile("/MatchingBraces/src/TestFile.txt"));
+		String filename = "/MatchingBraces/src/test.txt";
+		
+		boolean isMatching = scanFile(filename);
+		System.out.println(filename + isMatching);
 	}
 	
 	public static boolean scanFile(String filename) {
-		File f = null;
+		File f = new File(filename);
 		Scanner s = null;
-		f = new File(filename);
-		
+				
 		try {
 			s = new Scanner(f);
 		} catch(FileNotFoundException e) {
 			System.out.println(filename + " not Found");
+			System.exit(0);
 		}
 		
 		
