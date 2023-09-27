@@ -44,7 +44,7 @@ public class Card implements Comparable {
 	
 	@Override
 	public int compareTo(Object o) {
-		if(!(o instanceof Card)) throw(new IllegalArgumentException("Incompatible types"));
+		if(!(o instanceof Card)) throw new IllegalArgumentException("Incompatible types");
 		Card a = (Card) o;
 		
 		if(a.suit.equalsIgnoreCase(this.suit)) {
