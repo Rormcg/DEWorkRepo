@@ -44,12 +44,26 @@ public class Card implements Comparable {
 	
 	@Override
 	public int compareTo(Object o) {
+		if(!(o instanceof Card)) throw(new IllegalArgumentException("Incompatible types"));
+		Card a = (Card) o;
 		
-		return 0;
+		if(a.suit.equalsIgnoreCase(this.suit)) {
+			return this.rank - a.rank;
+		}
+		
+		return this.getSuitInt() - a.getSuitInt();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if(!(o instanceof Card)) throw(new IllegalArgumentException("Incompatible types"));
+		Card a = (Card) o;
+		
+		return a.suit.equalsIgnoreCase(this.suit) && a.rank == this.rank;
 	}
 	
 	public String toString() {
-		return suit + RANKS[rank];
+		return RANKS[rank] + " of " + suit;
 	}
 	
 	public void setRank(String r) {
@@ -98,8 +112,21 @@ public class Card implements Comparable {
 		return rank;
 	}
 	
+	public String getRankStr() {
+		return RANKS[rank];
+	}
+	
 	public String getSuit() {
 		return suit;
+	}
+	
+	public int getSuitInt() {
+		for(int i = 0; i < SUITS.length; i ++) {
+			if(SUITS[i].equalsIgnoreCase(suit)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 }
