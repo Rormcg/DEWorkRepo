@@ -40,11 +40,21 @@ public class Deck {
 	}
 	
 	public void shuffle() {
+		Card[] newDeck = new Card[cards.length];
+		for(int i = topCard; i >= 0; i --) {
+			//pick a random card from the remaining original deck
+			int rand = (int)(Math.random() * (i + 1));
+			//add that card to the new deck
+			newDeck[i] = cards[rand];
+			//then remove the card from the old deck
+			this.remove(rand);
+		}
 		
+		cards = newDeck;
 	}
 	
 	/**
-	 * ASSUMPTION: both decks only have one of each card
+	 * PRECONDITION: both decks only have one of each card
 	 */
 	@Override
 	public boolean equals(Object o) {
