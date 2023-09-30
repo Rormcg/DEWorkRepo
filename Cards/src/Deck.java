@@ -176,8 +176,29 @@ public class Deck {
 	
 	@Override
 	public String toString() {
-		
-		return null;
+		String s = "";
+		if(topCard == 51) {
+			for(int r = 0; r < 13; r ++) {
+				for(int c = 0; c < 4; c ++) {
+					s += cards[1].RANKS[r] + " of " + cards[1].SUITS[c];
+					if(c < 3) s += "\t";
+				}
+				s += "\n";
+			}
+			
+			/*for(int r = 0; r < 13; r ++) {
+				for(int c = 0; c < 4; c ++) {
+					s += cards[r*c + c].toString() + " ";
+				}
+				s += "\n";
+			}*/
+		} else {
+			for(int i  = 0; i < cards.length; i ++) {
+				s += i + ". " + cards[i].toString() + "\t";
+			}
+		}
+		s.trim();
+		return s;
 	}
 	
 	public Card[] getCards() {
