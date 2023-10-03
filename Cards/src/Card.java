@@ -1,5 +1,7 @@
 /**
  * Represents a playing card
+ * Has the fields suit and rank, implements Comparable for easy sorting
+ * For use in the Deck class
  * @author Rory McGuire
  */
 

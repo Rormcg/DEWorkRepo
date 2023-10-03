@@ -1,13 +1,15 @@
 /**
  * Represents a deck of cards
- * Contains an Array of Card objects
+ * Contains an array of Card objects (cards) and an int value topCard to represent the topmost
+ * non-null value
+ * Implements Selection Sort and Merge Sort to properly sort the cards array
  * @author Rory McGuire
  */
 
 
 
 public class Deck {
-	public final int NUMCARDS = 54; //Size of a full deck (NOT the number of cards currently in the deck)
+	public final int NUMCARDS = 52; //Size of a full deck (NOT the number of cards currently in the deck)
 	private Card[] cards = new Card[NUMCARDS];
 	private int topCard;
 	
@@ -30,10 +32,7 @@ public class Deck {
 	 * @param c the Card array to assign to cards
 	 */
 	Deck(Card[] c) {
-		for(int i = 0; i < cards.length || i < c.length; i ++) {
-			cards[i] = c[i];
-			if(i < cards.length || i < c.length) topCard = i;
-		}
+		setCards(c);
 	}
 	
 	/**
@@ -166,8 +165,8 @@ public class Deck {
 		for(int i = topCard; i > 0; i --) {
 			int biggest = 0;
 			//find the largest card
-			for(int j = 0; j < i; j ++) {
-				if(cards[j].compareTo(biggest) > 0) {
+			for(int j = 0; j <= i; j ++) {
+				if(cards[j].compareTo(cards[biggest]) > 0) {
 					biggest = j;
 				}
 			}
@@ -187,7 +186,21 @@ public class Deck {
 	public void mergeSort() {
 		//In order for mergeSort to have no parameters and still work recursively, the cards array
 		//must be sent as a parameter to a helper method, which does the actual sorting
-		cards = mergeSortArray(cards);
+		
+		//remove the ending null values
+		Card[] cutCards = new Card[topCard + 1];
+		for(int i = 0; i < cutCards.length; i++) {
+			cutCards[i] = cards[i];
+		}
+		
+		//mergesort the array via helper methods
+		cutCards = mergeSortArray(cutCards);
+		
+		//pass the sorted array to cards (now with the rightmost null values again)
+		cards = new Card[NUMCARDS];
+		for(int i = 0; i < cutCards.length; i ++) {
+			cards[i] = cutCards[i];
+		}
 	}
 	
 	private Card[] mergeSortArray(Card[] a) {
@@ -233,11 +246,11 @@ public class Deck {
 	@Override
 	public String toString() {
 		String s = "";
-		if(topCard == 51) {
+		if(topCard == NUMCARDS - 1) {
 			for(int r = 0; r < 13; r ++) {
 				for(int c = 0; c < 4; c ++) {
-					s += cards[1].RANKS[r] + " of " + cards[1].SUITS[c];
-					if(c < 3) s += "\t";
+					s += cards[0].RANKS[r] + " of " + cards[0].SUITS[c];
+					if(c <= 3) s += "\t";
 				}
 				s += "\n";
 			}
@@ -249,8 +262,8 @@ public class Deck {
 				s += "\n";
 			}*/
 		} else {
-			for(int i  = 0; i < cards.length; i ++) {
-				s += i + ". " + cards[i].toString() + "\n";
+			for(int i  = 0; i <= topCard; i ++) {
+				s += (i + 1) + ". " + cards[i] + "\n";
 			}
 		}
 		s.trim();
@@ -272,11 +285,12 @@ public class Deck {
 	 */
 	public void setCards(Card[] c) {
 		for(int i = 0; i < NUMCARDS - 1; i ++) {
-			if(i >= c.length) {
+			if(i >= c.length || c[i] == null) {
 				topCard = i - 1;
 				break;
 			}
 			this.cards[i] = new Card(c[i]);
+			if(i >= NUMCARDS - 2) topCard = NUMCARDS - 1;
 		}
 	}
 	
