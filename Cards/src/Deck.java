@@ -12,16 +12,23 @@ public class Deck {
 	private int topCard;
 	
 	
+	/**
+	 * Default Constructor: fills the cards array with a sorted set of Cards objects
+	 */
 	Deck() {
-		for(int i = 1; i <= 4; i ++) {
-			for(int j = 1; j <= 13; j ++) {
-				cards[(i - 1) * 13 + j - 1] = new Card(i, j);
+		for(int i = 0; i < 4; i ++) {
+			for(int j = 0; j < 13; j ++) {
+				cards[i * 13 + j] = new Card(i, j);
 			}
 		}
 		
 		topCard = NUMCARDS - 1;
 	}
 	
+	/**
+	 * Fills the cards array with the values passed through the parameters
+	 * @param c the Card array to assign to cards
+	 */
 	Deck(Card[] c) {
 		for(int i = 0; i < cards.length || i < c.length; i ++) {
 			cards[i] = c[i];
@@ -29,16 +36,27 @@ public class Deck {
 		}
 	}
 	
+	/**
+	 * Fills the cards array with a sorted array if true, but a shuffled one if false
+	 * @param a if false, shuffle the cards array
+	 */
 	Deck(boolean a) {
 		this();
 		
 		if(!a) shuffle();
 	}
 	
+	/**
+	 * Copy Constructor: creates a duplicate of the passed object d with the same fields
+	 * @param d the Deck object to be replicated
+	 */
 	Deck(Deck d) {
 		setCards(d.getCards());
 	}
 	
+	/**
+	 * Randomly shuffles the cards array, leaving empty indices at the back end of the array
+	 */
 	public void shuffle() {
 		Card[] newDeck = new Card[cards.length];
 		for(int i = topCard; i >= 0; i --) {
@@ -54,7 +72,11 @@ public class Deck {
 	}
 	
 	/**
+	 * Compares this Deck object with another Object to see if they are equal
 	 * PRECONDITION: both decks only have one of each card
+	 * @param o the object to compare this Deck to
+	 * @return boolean whether this equals o
+	 * @throws IllegalArgumentException if o is not an instance of Deck
 	 */
 	@Override
 	public boolean equals(Object o) {
@@ -72,6 +94,11 @@ public class Deck {
 		return true;
 	}
 	
+	/**
+	 * Finds out whether cards contains the Card object c or a Card that is equivalent to it
+	 * @param c Card to be checked whether it is contained in cards
+	 * @return whether c is in the cards array
+	 */
 	public boolean hasCard(Card c) {
 		for(Card x : cards) {
 			if(c.equals(x)) return true;
@@ -79,6 +106,15 @@ public class Deck {
 		return false;
 	}
 	
+	/**
+	 * Deals a select number of cards to a select number of hands, removing each card from the 
+	 * cards array. Will return nothing if there are not enough Card objects in cards, otherwise
+	 * will return each hand of cards as its own Deck in an array of Decks
+	 * @param hands the number of hands to be dealt
+	 * @param cardsPerHand the number of Cards to be dealt to each hand
+	 * @return null if not enough cards to be dealt, otherwise an array of Decks, each Deck
+	 * being a hand
+	 */
 	public Deck[] deal(int hands, int cardsPerHand) {
 		//If there aren't enough cards to deal, return null
 		if(hands * cardsPerHand > this.cards.length) return null;
@@ -100,6 +136,10 @@ public class Deck {
 		return decks;
 	}
 	
+	/**
+	 * Picks a random card from cards, removes it from the deck, and returns the Card
+	 * @return the random Card to be picked from cards
+	 */
 	public Card pick() {
 		int randIndex = (int)(Math.random() * (topCard + 1));
 		Card c = cards[randIndex];
@@ -108,7 +148,10 @@ public class Deck {
 		return c;
 	}
 	
-	//remove the card at index x
+	/**
+	 * Remove the Card at a given index, sliding the other Cards to the left to fill its place
+	 * @param x the index in cards of the Card to be removed
+	 */
 	public void remove(int x) {
 		for(int i = x; i < cards.length - 1; i ++) {
 			cards[i] = cards[i + 1];
@@ -116,6 +159,9 @@ public class Deck {
 		cards[cards.length - 1] = null;
 	}
 	
+	/**
+	 * Sorts the cards array via selection sort with O(n^2) efficiency
+	 */
 	public void selectionSort() {
 		for(int i = topCard; i > 0; i --) {
 			int biggest = 0;
@@ -134,6 +180,10 @@ public class Deck {
 		}
 	}
 	
+	/**
+	 * Sorts the cards array via mergesort with O(n*log(n)) efficiency
+	 * Passes the cards array to helper methods in order to sort the array recursively
+	 */
 	public void mergeSort() {
 		//In order for mergeSort to have no parameters and still work recursively, the cards array
 		//must be sent as a parameter to a helper method, which does the actual sorting
@@ -174,6 +224,12 @@ public class Deck {
 	}
 	
 	
+	/**
+	 * Returns a String representation of the cards array
+	 * If the cards array is full with 52 Cards, will return the Cards in four columns, one for each rank
+	 * Otherwise, will return a numbered list of each Card in cards, with each Card on its own line
+	 * @return the String representation of cards
+	 */
 	@Override
 	public String toString() {
 		String s = "";
@@ -194,20 +250,32 @@ public class Deck {
 			}*/
 		} else {
 			for(int i  = 0; i < cards.length; i ++) {
-				s += i + ". " + cards[i].toString() + "\t";
+				s += i + ". " + cards[i].toString() + "\n";
 			}
 		}
 		s.trim();
 		return s;
 	}
 	
+	/**
+	 * Returns the cards field
+	 * @return returns the Card array cards
+	 */
 	public Card[] getCards() {
 		return cards;
 	}
 	
+	/**
+	 * Sets the value of cards according to the value of c - will instantiate new values for each
+	 * Card rather than using the same memory addresses
+	 * @param c the Card array to be copied into cards
+	 */
 	public void setCards(Card[] c) {
 		for(int i = 0; i < NUMCARDS - 1; i ++) {
-			if(i >= c.length) break;
+			if(i >= c.length) {
+				topCard = i - 1;
+				break;
+			}
 			this.cards[i] = new Card(c[i]);
 		}
 	}
