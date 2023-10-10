@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class DocumentIndex extends ArrayList<IndexEntry>{
    
-   DocumentIndex() {
+   DocumentIndex() { 
       super();
    }
    
