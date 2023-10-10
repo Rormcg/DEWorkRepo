@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 /**
  * Represents a deck of cards
  * Contains an array of Card objects (cards) and an int value topCard to represent the topmost
@@ -72,7 +74,6 @@ public class Deck {
 	
 	/**
 	 * Compares this Deck object with another Object to see if they are equal
-	 * PRECONDITION: both decks only have one of each card
 	 * @param o the object to compare this Deck to
 	 * @return boolean whether this equals o
 	 * @throws IllegalArgumentException if o is not an instance of Deck
@@ -82,8 +83,19 @@ public class Deck {
 		if(!(o instanceof Deck)) throw new IllegalArgumentException("Incompatible types");
 		Deck a = (Deck) o;
 		
-		if(a.getCards().length != cards.length) return false;
+		if(a.topCard != this.topCard) return false;
 		
+		Card[] thisCards = this.getEffectiveCards();
+		Card[] aCards = a.getEffectiveCards();
+		
+		Arrays.sort(thisCards);
+		Arrays.sort(aCards);
+		
+		for(int i = 0; i <= this.topCard; i++) {
+			if(!thisCards[i].equals(aCards[i])) return false;
+		}
+		return true;
+		/*
 		//check if they have all the same cards
 		for(Card x : a.getCards()) {
 			if(!this.hasCard(x)) {
@@ -91,6 +103,7 @@ public class Deck {
 			}
 		}
 		return true;
+		*/
 	}
 	
 	/**
@@ -276,6 +289,17 @@ public class Deck {
 	 */
 	public Card[] getCards() {
 		return cards;
+	}
+	
+	/*
+	 * @return the non-null elements in this.cards
+	 */
+	public Card[] getEffectiveCards() {
+		Card[] newCards = new Card[topCard + 1];
+		for(int i = 0; i <= topCard; i++) {
+			newCards[i] = cards[i];
+		}
+		return newCards;
 	}
 	
 	/**
