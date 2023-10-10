@@ -4,15 +4,15 @@ Rory Mcguire
 Lab: IndexMaker
 */
 
-import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class IndexEntry {
    private String word;
-   private ArrayList<Integer> numsList;
+   private TreeSet<Integer> numsList;
    
    IndexEntry(String w) {
       word = w.toUpperCase();
-      numsList = new ArrayList<Integer> ();
+      numsList = new TreeSet<Integer> ();
    }
    
    public void add(int num) {

@@ -5,10 +5,11 @@ Lab: Index Maker
 */
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
-public class DocumentIndex extends ArrayList<IndexEntry>{
+public class DocumentIndex extends TreeMap<String, IndexEntry>{
    
-   DocumentIndex() { 
+   DocumentIndex() {
       super();
    }
    
