@@ -222,22 +222,25 @@ public class Deck {
 	 * Passes the cards array to helper methods in order to sort the array recursively
 	 */
 	public void mergeSort() {
-		//In order for mergeSort to have no parameters and still work recursively, the cards array
-		//must be sent as a parameter to a helper method, which does the actual sorting
-		
-		//remove the ending null values
-		Card[] cutCards = new Card[topCard + 1];
-		for(int i = 0; i < cutCards.length; i++) {
-			cutCards[i] = cards[i];
-		}
-		
-		//mergesort the array via helper methods
-		cutCards = mergeSortArray(cutCards);
-		
-		//pass the sorted array to cards (now with the rightmost null values again)
-		cards = new Card[NUMCARDS];
-		for(int i = 0; i < cutCards.length; i ++) {
-			cards[i] = cutCards[i];
+		//if(this.cards == null) throw new IllegalArgumentException("cards cannot be null");
+		if(cards != null) {
+			//In order for mergeSort to have no parameters and still work recursively, the cards array
+			//must be sent as a parameter to a helper method, which does the actual sorting
+			
+			//remove the ending null values
+			Card[] cutCards = new Card[topCard + 1];
+			for(int i = 0; i < cutCards.length; i++) {
+				cutCards[i] = cards[i];
+			}
+			
+			//mergesort the array via helper methods
+			cutCards = mergeSortArray(cutCards);
+			
+			//pass the sorted array to cards (now with the rightmost null values again)
+			cards = new Card[NUMCARDS];
+			for(int i = 0; i < cutCards.length; i ++) {
+				cards[i] = cutCards[i];
+			}
 		}
 	}
 	
