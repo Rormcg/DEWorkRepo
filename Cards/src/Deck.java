@@ -56,10 +56,31 @@ public class Deck {
 	}
 	
 	/**
-	 * Randomly shuffles the cards array, leaving empty indices at the back end of the array
+	 * Randomly shuffles the cards array, leaving empty indices at the back end of the array.
+	 * Default version of shuffle(shuffleNum) - will only swap each element in cards once
 	 */
 	public void shuffle() {
-		Card[] newDeck = new Card[cards.length];
+		shuffle(1);
+	}
+	
+	/**
+	 * Randomly shuffles the cards array, leaving empty indices at the back end of the array
+	 * @param shuffleNum the number of times to shuffle the array - increase this for extra randomness
+	 */
+	public void shuffle(int shuffleNum) {
+		if(shuffleNum <= 0) throw new IllegalArgumentException("shuffleNum must be greater than 0");
+		for(int j = 0; j < shuffleNum; j ++) {
+			for(int i = 0; i < cards.length; i++) {
+				//randomly swap cards[i] with another element in cards
+				int index = (int)(Math.random() * cards.length);
+				Card temp = cards[i];
+				cards[i] = cards[index];
+				cards[index] = temp;
+			}
+		}
+		
+		
+		/*Card[] newDeck = new Card[cards.length];
 		for(int i = topCard; i >= 0; i --) {
 			//pick a random card from the remaining original deck
 			int rand = (int)(Math.random() * (i + 1));
@@ -70,6 +91,7 @@ public class Deck {
 		}
 		
 		cards = newDeck;
+		*/
 	}
 	
 	/**
@@ -85,14 +107,14 @@ public class Deck {
 		
 		if(a.topCard != this.topCard) return false;
 		
-		Card[] thisCards = this.getEffectiveCards();
-		Card[] aCards = a.getEffectiveCards();
+		Deck thisSorted = new Deck(this);
+		Deck aSorted = new Deck(a);
 		
-		Arrays.sort(thisCards);
-		Arrays.sort(aCards);
+		thisSorted.selectionSort();
+		aSorted.selectionSort();
 		
 		for(int i = 0; i <= this.topCard; i++) {
-			if(!thisCards[i].equals(aCards[i])) return false;
+			if(!thisSorted.cards[i].equals(aSorted.cards[i])) return false;
 		}
 		return true;
 		/*
@@ -165,10 +187,11 @@ public class Deck {
 	 * @param x the index in cards of the Card to be removed
 	 */
 	public void remove(int x) {
-		for(int i = x; i < cards.length - 1; i ++) {
+		for(int i = x; i < topCard && i < cards.length - 1; i ++) {
 			cards[i] = cards[i + 1];
 		}
 		cards[cards.length - 1] = null;
+		topCard --;
 	}
 	
 	/**

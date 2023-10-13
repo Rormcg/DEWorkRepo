@@ -5,7 +5,7 @@
  * @author Rory McGuire
  */
 
-public class Card implements Comparable {
+public class Card implements Comparable<Card> {
 	private String suit;
 	private int rank;
 	
@@ -68,24 +68,20 @@ public class Card implements Comparable {
 	}
 	
 	/**
-	 * Method to compare another object to this Card object
+	 * Method to compare another Card object to this Card object
 	 * If the return value = 0, then the objects are equal
 	 * If the return value is negative, then this object is less than the other
 	 * If positive, then this object is greater than the other
-	 * @param o Object to be compared to this Card Object
+	 * @param o Card to be compared to this Card Object
 	 * @return integer representing "this object minus other object o"
-	 * @throws IllegalArgumentException if o is not an instance of the Card class
 	 */
 	@Override
-	public int compareTo(Object o) {
-		if(!(o instanceof Card)) throw new IllegalArgumentException("Incompatible types");
-		Card a = (Card) o;
-		
-		if(a.suit.equalsIgnoreCase(this.suit)) {
-			return this.rank - a.rank;
+	public int compareTo(Card o) {
+		if(o.suit.equalsIgnoreCase(this.suit)) {
+			return this.rank - o.rank;
 		}
 		
-		return this.getSuitInt() - a.getSuitInt();
+		return this.getSuitInt() - o.getSuitInt();
 	}
 	
 	/**
