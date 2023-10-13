@@ -153,19 +153,19 @@ public class Deck {
 		//If there aren't enough cards to deal, return null
 		if(hands * cardsPerHand > this.topCard + 1) return null;
 		
-		Card[][] a = new Card[hands][cardsPerHand];
+		Card[][] newHands = new Card[hands][cardsPerHand];
 		for(int i = 0; i < cardsPerHand; i ++) {
 			for(int j = 0; j < hands; j ++) {
 				
-				a[j][i] = this.cards[this.topCard];
+				newHands[j][i] = this.cards[this.topCard];
 				this.remove(this.topCard);
 				topCard --;
 			}
 		}
 		
 		Deck[] decks = new Deck[hands];
-		for(int i  = 0; i < a[hands].length; i ++) {
-			decks[i] = new Deck(a[i]);
+		for(int i  = 0; i < newHands[hands].length; i ++) {
+			decks[i] = new Deck(newHands[i]);
 		}
 		
 		//topCard -= hands * cardsPerHand;
