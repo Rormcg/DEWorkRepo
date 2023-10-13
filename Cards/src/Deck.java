@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 /**
  * Represents a deck of cards
  * Contains an array of Card objects (cards) and an int value topCard to represent the topmost
@@ -12,6 +10,8 @@ import java.util.Arrays;
 
 public class Deck {
 	public final int NUMCARDS = 52; //Size of a full deck (NOT the number of cards currently in the deck)
+	public final int NUMSUIT = 4; //number of suits
+	public final int NUMRANK = 13; //number of ranks
 	private Card[] cards = new Card[NUMCARDS];
 	private int topCard;
 	
@@ -20,8 +20,8 @@ public class Deck {
 	 * Default Constructor: fills the cards array with a sorted set of Cards objects
 	 */
 	Deck() {
-		for(int i = 0; i < 4; i ++) {
-			for(int j = 0; j < 13; j ++) {
+		for(int i = 0; i < NUMSUIT; i ++) {
+			for(int j = 0; j < NUMRANK; j ++) {
 				cards[i * 13 + j] = new Card(i, j);
 			}
 		}
@@ -151,14 +151,15 @@ public class Deck {
 	 */
 	public Deck[] deal(int hands, int cardsPerHand) {
 		//If there aren't enough cards to deal, return null
-		if(hands * cardsPerHand > this.cards.length) return null;
+		if(hands * cardsPerHand > this.topCard + 1) return null;
 		
 		Card[][] a = new Card[hands][cardsPerHand];
 		for(int i = 0; i < cardsPerHand; i ++) {
 			for(int j = 0; j < hands; j ++) {
 				
-				a[j][i] = this.cards[this.cards.length - (i * hands + j)];
-				this.remove(cards.length - (i * hands + j));
+				a[j][i] = this.cards[this.topCard];
+				this.remove(this.topCard);
+				topCard --;
 			}
 		}
 		
@@ -167,6 +168,7 @@ public class Deck {
 			decks[i] = new Deck(a[i]);
 		}
 		
+		//topCard -= hands * cardsPerHand;
 		return decks;
 	}
 	
@@ -283,10 +285,10 @@ public class Deck {
 	public String toString() {
 		String s = "";
 		if(topCard == NUMCARDS - 1) {
-			for(int r = 0; r < 13; r ++) {
-				for(int c = 0; c < 4; c ++) {
+			for(int r = 0; r < NUMRANK; r ++) {
+				for(int c = 0; c < NUMSUIT; c ++) {
 					s += cards[0].RANKS[r] + " of " + cards[0].SUITS[c];
-					if(c <= 3) s += "\t";
+					if(c <= NUMSUIT - 1) s += "\t";
 				}
 				s += "\n";
 			}
