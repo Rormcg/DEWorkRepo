@@ -58,13 +58,14 @@ public class IndexMaker
     }
     //System.out.println(index);
     // Save index:
-
-    for (String entry : index.keySet())
-      outputFile.println(index.get(entry));
     
-    //for(int i = 0; i < index.keySet().size(); i++) {
-    //	outputFile.println(index.get(index.keySet().get(i)));
-    //}
+    int count = 0;
+    for (String entry : index.keySet()) {
+    	count ++;
+      	outputFile.print(index.get(entry));
+      	if(count < index.keySet().size() - 1)
+      		System.out.print("\n");
+    }
 
     // Finish:
 

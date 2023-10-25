@@ -42,7 +42,7 @@ public class IndexEntry implements Comparable<IndexEntry> {
    }
    
    public String toString() {
-      return word + ": " + numsList.toString();
+      return word + ": " + numsList.toString().replaceAll("\\[|\\]", "");
    }
    
    
