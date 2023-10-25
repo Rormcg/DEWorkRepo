@@ -6,13 +6,19 @@ Lab: IndexMaker
 
 import java.util.TreeSet;
 
-public class IndexEntry {
+public class IndexEntry implements Comparable<IndexEntry> {
    private String word;
    private TreeSet<Integer> numsList;
    
    IndexEntry(String w) {
       word = w.toUpperCase();
       numsList = new TreeSet<Integer> ();
+   }
+   
+   IndexEntry(String w, int num) {
+      word = w.toUpperCase();
+      numsList = new TreeSet<Integer> ();
+      add(num);
    }
    
    public void add(int num) {
@@ -25,11 +31,10 @@ public class IndexEntry {
       }
       if(a) numsList.add(num);
    }
-
-   public static void main(String[] args) {
-       /*IndexEntry in = new IndexEntry("hello");
-       in.add(1);
-       System.out.println(in);*/
+   
+   @Override
+   public int compareTo(IndexEntry e) {
+	   return word.compareTo(e.word);
    }
    
    public String getWord() {
@@ -37,12 +42,7 @@ public class IndexEntry {
    }
    
    public String toString() {
-      String str = word + " ";
-      for(int i = 0; i < numsList.size(); i++) {
-         str += numsList.get(i);
-         if(i < numsList.size() - 1) str += ", ";
-      }
-      return str;
+      return word + ": " + numsList.toString();
    }
    
    
