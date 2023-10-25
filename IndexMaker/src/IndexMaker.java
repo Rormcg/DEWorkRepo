@@ -61,10 +61,10 @@ public class IndexMaker
     
     int count = 0;
     for (String entry : index.keySet()) {
-    	count ++;
       	outputFile.print(index.get(entry));
       	if(count < index.keySet().size() - 1)
-      		System.out.print("\n");
+      		outputFile.println();
+      	count ++;
     }
 
     // Finish:
