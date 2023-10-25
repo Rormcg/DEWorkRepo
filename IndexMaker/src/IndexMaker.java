@@ -59,8 +59,12 @@ public class IndexMaker
     //System.out.println(index);
     // Save index:
 
-    for (IndexEntry entry : index)
-      outputFile.println(entry);
+    for (String entry : index.keySet())
+      outputFile.println(index.get(entry));
+    
+    //for(int i = 0; i < index.keySet().size(); i++) {
+    //	outputFile.println(index.get(index.keySet().get(i)));
+    //}
 
     // Finish:
 
