@@ -1,19 +1,28 @@
-/*
-Rory McGuire
-1/27/2023
-Lab: Index Maker
+/**
+ * DocumentIndex
+ * @author Rory McGuire
+ * Represents a collection of IndexEntrys<br>
+ * Extends TreeMap&lt;String, IndexEntry&gt;, where the String shows the word associated with the IndexEntry
 */
 
 import java.util.TreeMap;
 
-public class DocumentIndex extends TreeMap<String, IndexEntry>{
+public class DocumentIndex extends TreeMap<String, IndexEntry> {
    
    private static final long serialVersionUID = 1L;
-
+   
+   /**
+    * No-args constructor - calls the constructor of TreeMap
+    */
    DocumentIndex() {
       super();
    }
-
+   
+   /**
+    * Adds a number into the IndexEntry with word, if none exists create a new IndexEntry with num in it
+    * @param word the word associated with the IndexEntry
+    * @param num the number to be added into the IndexEntry
+    */
    public void addWord(String word, int num) {
        if(keySet().contains(word.toUpperCase())) {
     	   get(word.toUpperCase()).add(num);
@@ -21,7 +30,12 @@ public class DocumentIndex extends TreeMap<String, IndexEntry>{
     	   put(word.toUpperCase(), new IndexEntry(word.toUpperCase(), num));
        }
    }
-
+   
+   /**
+    * Adds all of the words in a certain line of text into this
+    * @param str the String to be broken up each word to be added to this
+    * @param num the line number of the String (the number to be placed into the IndexEntrys)
+    */
    public void addAllWords(String str, int num) {
 		String[] s = str.split("\\W+");
 		for(String a: s) {

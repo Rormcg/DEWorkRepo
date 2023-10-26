@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"<Unnamed>","c":"DocumentIndex","l":"addAllWords(String, int)","u":"addAllWords(java.lang.String,int)"},{"p":"<Unnamed>","c":"DocumentIndex","l":"addWord(String, int)","u":"addWord(java.lang.String,int)"}];updateSearchResults();
