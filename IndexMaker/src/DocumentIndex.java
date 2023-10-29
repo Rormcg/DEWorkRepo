@@ -12,7 +12,7 @@ public class DocumentIndex extends TreeMap<String, IndexEntry> {
    private static final long serialVersionUID = 1L;
    
    /**
-    * No-args constructor - calls the constructor of TreeMap
+    * No-args constructor - calls the no-args constructor of the superclass TreeMap
     */
    DocumentIndex() {
       super();
@@ -24,6 +24,8 @@ public class DocumentIndex extends TreeMap<String, IndexEntry> {
     * @param num the number to be added into the IndexEntry
     */
    public void addWord(String word, int num) {
+	   if(word == null) return;
+	   
        if(keySet().contains(word.toUpperCase())) {
     	   get(word.toUpperCase()).add(num);
        } else {
@@ -35,14 +37,16 @@ public class DocumentIndex extends TreeMap<String, IndexEntry> {
     * Adds all of the words in a certain line of text into this
     * @param str the String to be broken up each word to be added to this
     * @param num the line number of the String (the number to be placed into the IndexEntrys)
-    */
-   public void addAllWords(String str, int num) {
+	*/
+	public void addAllWords(String str, int num) {   	
+		if(str == null) return;
+		
 		String[] s = str.split("\\W+");
 		for(String a: s) {
-		    if(!a.equals("")) {
-		        addWord(a, num);
-		    }
+			if(!a.equals("")) {
+				addWord(a, num);
+			}
 		}
-   }
+	}
    
 }

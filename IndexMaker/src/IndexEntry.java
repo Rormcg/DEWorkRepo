@@ -16,6 +16,7 @@ public class IndexEntry implements Comparable<IndexEntry> {
     * @param w the value to be assigned to word
     */
    IndexEntry(String w) {
+	  if(w == null) throw new IllegalArgumentException("IndexEntry.word cannot be null");
       word = w.toUpperCase();
       numsList = new TreeSet<Integer> ();
    }
@@ -26,6 +27,7 @@ public class IndexEntry implements Comparable<IndexEntry> {
     * @param num the value to be placed into numsList
     */
    IndexEntry(String w, int num) {
+	  if(w == null) throw new IllegalArgumentException("IndexEntry.word cannot be null");
       word = w.toUpperCase();
       numsList = new TreeSet<Integer> ();
       add(num);
@@ -43,12 +45,12 @@ public class IndexEntry implements Comparable<IndexEntry> {
     * Overrides the Comparable compareTo method<br>
     * Compares this to another IndexEntry by using the String.compareTo methods for the word fields for both objects
     * @param e the IndexEntry to be compared to this
-    * @return int >0 if this>e, <0 if this<e, 0 if this==e
+    * @return int >0 if this > e, <0 if this < e, 0 if this==e
     */
    @Override
    public int compareTo(IndexEntry e) {
-	   if(e == null && word != null) return 1;
-	   return word.compareTo(null);
+	   if(e == null) return 1;
+	   return word.compareTo(e.word);
    }
    
    /**
