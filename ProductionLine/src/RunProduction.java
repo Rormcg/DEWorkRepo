@@ -32,10 +32,10 @@ public class RunProduction {
 		
 		String out = "";
 		while(!production.outputIsEmpty()) {
-			out += production.removeTower();
+			out += production.removeTower() + "\n";
 		}
 		
-		System.out.println(out);
+		System.out.println(out.trim());
 	}
 
 }

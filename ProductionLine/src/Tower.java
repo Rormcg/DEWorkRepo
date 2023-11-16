@@ -19,7 +19,7 @@ public class Tower extends Stack<Disk> {
 		String s = "";
 		int count = 0;
 		for(Disk d : this) {
-			s += "Disk " + count + ": " + d + "\n";
+			s += "Disk " + count + ": " + d + " ";
 			count ++;
 		}
 		return s.trim();

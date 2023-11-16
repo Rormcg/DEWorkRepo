@@ -31,7 +31,7 @@ public class ProductionLine {
 	
 	public void process() {
 		while(!input.isEmpty()) {
-			if(robotArm.compareTop(input.peek()) <= 0) {
+			if(robotArm.empty() || robotArm.compareTop(input.peek()) <= 0) {
 				robotArm.push(input.remove());
 			} else {
 				unloadRobot();
