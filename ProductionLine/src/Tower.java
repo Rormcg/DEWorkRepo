@@ -17,12 +17,12 @@ public class Tower extends Stack<Disk> {
 	@Override
 	public String toString() {
 		String s = "";
-		int count = 0;
 		for(Disk d : this) {
-			s += "Disk " + count + ": " + d + " ";
-			count ++;
+			s += d + ", "; 
 		}
-		return s.trim();
+		
+		//Bottom to Top
+		return "(B-T) [" + s.substring(0, s.length() - 2) + "]";
 	}
 	
 }

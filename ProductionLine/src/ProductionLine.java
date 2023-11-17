@@ -22,11 +22,12 @@ public class ProductionLine {
 	
 	public void unloadRobot() {
 		Tower newTower = new Tower();
-		
+		//System.out.print("Robot" + robotArm);
 		while(!robotArm.empty()) {
 			newTower.push(robotArm.pop());
 		}
 		output.add(newTower);
+		//System.out.println(" NewTower" + newTower);
 	}
 	
 	public void process() {
