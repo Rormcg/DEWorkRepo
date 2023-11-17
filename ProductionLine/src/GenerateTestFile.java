@@ -10,7 +10,7 @@ public class GenerateTestFile {
 
 	public static void main(String[] args) {
 		int numDisks = 20;
-		int maxRadius = 40;
+		//int maxRadius = 40;
 		String filename = "input.txt";
 		
 		File f = new File(filename);
@@ -23,7 +23,7 @@ public class GenerateTestFile {
 		}
 		
 		for(int i = 0; i < numDisks; i ++) {
-			p.print((int)(Math.random() * maxRadius + 1));
+			p.print((int)(Math.random() * Disk.LARGEST + 1));
 			if(i < numDisks - 1)
 				p.println();
 		}

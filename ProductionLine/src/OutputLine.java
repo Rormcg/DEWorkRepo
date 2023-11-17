@@ -1,15 +1,25 @@
-import java.util.Collection;
+/**
+ * @author Rory McGuire
+ */
+
 import java.util.LinkedList;
 
+import java.awt.Graphics;
+
 public class OutputLine extends LinkedList<Tower> {
-
-	public OutputLine() {
-		// TODO Auto-generated constructor stub
+	private int height;
+	
+	public OutputLine(int y) {
+		super();
+		height = y;
 	}
-
-	public OutputLine(Collection c) {
-		super(c);
-		// TODO Auto-generated constructor stub
+	
+	public void draw(Graphics g) {
+		
+	}
+	
+	public void update() {
+		
 	}
 
 }

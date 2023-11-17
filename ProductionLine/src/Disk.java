@@ -6,7 +6,10 @@
 public class Disk implements Comparable<Disk> {
 	private int radius;
 	
+	public static final int LARGEST = 30;
+	
 	public Disk(int rad) {
+		if(rad > LARGEST) throw new IllegalArgumentException("rad must be smaller than Disk.Largest");
 		radius = rad;
 	}
 	
@@ -19,5 +22,9 @@ public class Disk implements Comparable<Disk> {
 	public String toString() {
 		//return "Radius=" + radius;
 		return ""+radius;
+	}
+	
+	public int getRadius() {
+		return radius;
 	}
 }

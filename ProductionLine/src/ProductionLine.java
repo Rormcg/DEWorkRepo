@@ -2,18 +2,45 @@
  * @author Rory McGuire
  */
 
-import java.util.LinkedList;
-import java.util.Queue;
 
-public class ProductionLine {
-	Queue<Disk> input;
-	Queue<Tower> output;
-	Tower robotArm;
+import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
+
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+
+public class ProductionLine extends JComponent implements ActionListener {
+	private InputLine input;
+	private OutputLine output;
+	private Tower robotArm;
+	
+	private JComponent comp;
+	private JFrame frame;
+	private Container content;
+	private Timer timer;
+	
+	public final int WIDTH = 500, HEIGHT = 400;
+	public final int TREADHEIGHT = 250;
 	
 	public ProductionLine() {
-		input = new LinkedList<Disk>();
-		output = new LinkedList<Tower>();
+		input = new InputLine(TREADHEIGHT);
+		output = new OutputLine(TREADHEIGHT);
 		robotArm = new Tower();
+		
+		frame = new JFrame("ProductionLine");
+		content = frame.getContentPane();
+		content.add(this);
+		
+		frame.setSize(WIDTH, HEIGHT);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
+		
+		timer = new Timer(1, this);
+		timer.start();
 	}
 	
 	public void addDisk(Disk d) {
@@ -46,6 +73,20 @@ public class ProductionLine {
 	
 	public boolean outputIsEmpty() {
 		return output.isEmpty();
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		input.draw(g);
+		output.draw(g);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		input.update();
+		output.update();
+		repaint();
+		
 	}
 	
 }
