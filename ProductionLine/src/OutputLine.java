@@ -8,10 +8,12 @@ import java.awt.Graphics;
 
 public class OutputLine extends LinkedList<Tower> {
 	private int height;
+	private boolean completed;
 	
 	public OutputLine(int y) {
 		super();
 		height = y;
+		completed = true;
 	}
 	
 	public void draw(Graphics g) {
@@ -21,5 +23,8 @@ public class OutputLine extends LinkedList<Tower> {
 	public void update() {
 		
 	}
-
+	
+	public boolean getCompleted() {
+		return completed;
+	}
 }
