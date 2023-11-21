@@ -21,7 +21,9 @@ public class ProductionLine extends JComponent implements ActionListener {
 	private JFrame frame;
 	private Timer timer;
 	
-	public final static int SPEED = 4;
+	private boolean completed;
+	
+	public final static int SPEED = 10;
 	public final int WIDTH = 900, HEIGHT = 400;
 	public final int TREADHEIGHT = 300;
 	
@@ -29,6 +31,7 @@ public class ProductionLine extends JComponent implements ActionListener {
 		input = new InputLine(TREADHEIGHT);
 		output = new OutputLine(TREADHEIGHT);
 		robotArm = new RobotArm(WIDTH / 2, HEIGHT / 20, input, output);
+		completed = false;
 		
 		if(!noGraphics) {
 			frame = new JFrame("ProductionLine");
@@ -95,6 +98,19 @@ public class ProductionLine extends JComponent implements ActionListener {
 		output.update();
 		robotArm.update();
 		repaint();
+		
+		if(robotArm.completed() && completed != true) { //when the process is done
+			//print out the output:
+			printOutput();
+			completed = true;
+		}
 	}
 	
+	public void printOutput() {
+		System.out.println("Output: \n" + output);
+	}
+	
+	public void printInput() {
+		System.out.println("Input: \n" + input);
+	}
 }

@@ -56,6 +56,8 @@ public class RunProduction {
 		
 		readInDisks(production, args[0]);
 		
+		production.printInput();
+		
 		if(runWithoutGraphics) {
 			runProduction(production);
 		}

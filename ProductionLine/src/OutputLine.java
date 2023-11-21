@@ -18,7 +18,7 @@ public class OutputLine extends LinkedList<Tower> {
 	private int rotation; //the rotation of the cog in degrees
 	
 	public final int HEIGHT = 30; //the height of the tread
-	public final int BUFFER = 10; //Space between elements in the line
+	public final int BUFFER = 12; //Space between elements in the line
 	public final int SPEED = ProductionLine.SPEED / 2 + 1; //How fast the line will move
 	public final int ROTATIONSPEED = SPEED * 2; //How fast the cog will spin
 	
@@ -39,7 +39,7 @@ public class OutputLine extends LinkedList<Tower> {
 		while(l.hasPrevious()) {
 			Tower prev = l.previous();
 			tempX += prev.getRadius() + BUFFER;
-			prev.draw(tempX, y - Disk.HEIGHT, g);
+			prev.draw(tempX, y, g);
 			tempX += prev.getRadius();
 		}
 		
@@ -110,5 +110,16 @@ public class OutputLine extends LinkedList<Tower> {
 	
 	public int getY() {
 		return y;
+	}
+	
+	@Override
+	public String toString() {
+		String s = "(FOF) \n";//First-Out is displayed as "first" in the list
+		int count = 0;
+		for(Tower t : this) {
+			s += "Tower " + count + ": " + t + "\n";
+			count ++;
+		}
+		return s.trim();
 	}
 }

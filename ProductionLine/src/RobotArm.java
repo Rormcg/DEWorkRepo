@@ -80,7 +80,7 @@ public class RobotArm {
 			}
 		} else if(phase == 6) {
 			Graphics2D g2 = (Graphics2D)g;
-			g2.translate(currentPos.x, currentPos.y - tower.getHeight());
+			g2.translate(currentPos.x, currentPos.y);
 			g2.rotate(Math.PI);
 			tower.draw(0, 0, g);
 			try {
@@ -155,7 +155,7 @@ public class RobotArm {
 			case 5: //grabbing the newly rotated stack
 				if(!moveYFirst()) {
 					phase ++;
-					targetPos.setLocation(out.getX() + in.getLast().getRadius()*2 + out.BUFFER, out.getY() - tower.getHeight() );//- Disk.HEIGHT);
+					targetPos.setLocation(out.getX() + tower.getRadius() + out.BUFFER, out.getY() - tower.getHeight());
 				}
 				break;
 			case 6: //placing the stack onto the output
@@ -176,7 +176,8 @@ public class RobotArm {
 					phase = 0;
 				}
 				break;
-			case 8:
+			default:
+				//When the Arm is finished...
 				
 		}
 	}
@@ -224,9 +225,8 @@ public class RobotArm {
 	}
 	
 	public void processOneDisk() {
-		if(!in.isEmpty() && tower.empty() || (tower.compareTop(in.peek()) <= 0 && tower.size() < MAX_STACK)) {
+		if(!in.isEmpty() && (tower.empty() || (tower.compareTop(in.peek()) <= 0 && tower.size() < MAX_STACK))) {
 			//robotArm.push(input.remove());
-			System.out.println("H");
 			phase = 1;
 			targetPos.setLocation(in.getX() - in.getFirst().getRadius() - in.BUFFER, in.getY() - Disk.HEIGHT);
 			//addDisk(in.remove());
