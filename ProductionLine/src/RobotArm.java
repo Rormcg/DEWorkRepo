@@ -14,16 +14,20 @@ public class RobotArm {
 	private InputLine in;
 	private OutputLine out;
 	
-	private int phase = 0;
-	//0 = awaiting next phase
-	//1 = removing Disk from input
-	//2 = placing Disk from input onto the Stack
-	//3 = rotating the Stack (closing the doors)
-	//4 = opening the doors
-	//5 = grabbing the rotated Stack
-	//6 = placing the rotated Stack onto the output
-	//7 = returning to original position
-	//8 = completely done
+	/*represents each of the phases that this RobotArm can be in:
+	 * WAIT = awaiting next phase
+	 * REMOVE = removing Disk from input
+	 * PLACE_INPUT = placing Disk from input onto the Stack
+	 * CLOSE = rotating the Stack (closing the doors)
+	 * OPEN = opening the doors
+	 * GRAB_STACK = grabbing the rotated Stack
+	 * PLACE_STACK = placing the rotated Stack onto the output
+	 * RETURN = returning to original position
+	 * DONE = completely done
+	 */
+	private enum Phases {WAIT, REMOVE, PLACE_INPUT, CLOSE, OPEN, GRAB_STACK, PLACE_STACK, RETURN, DONE};
+	private Phases phase; //the current phase
+	
 	
 	private final Point pos; //the constant center position
 	private final Point stackPos; //the constant position of this RobotArm's stack of Disks
@@ -36,6 +40,14 @@ public class RobotArm {
 	public final int MAX_STACK = 10; //the most Disks this is willing to include in a single stack
 	public final int SPEED = ProductionLine.SPEED;
 	
+	/**
+	 * Constructor for instantiating an object of type RobotArm.
+	 * Instantiates all fields relative to the parameters sent to this constructor.
+	 * @param x the x value of the RobotArm's origin position
+	 * @param y the y value of the RobotArm's origin position
+	 * @param input the InputLine to be used by the RobotArm
+	 * @param output the OutputLine to be used by the RobotArm
+	 */
 	public RobotArm(int x, int y, InputLine input, OutputLine output) {
 		tower = new Tower();
 		
@@ -47,10 +59,14 @@ public class RobotArm {
 		in = input;
 		out = output;
 		
-		phase = 0;
+		phase = Phases.WAIT;
 		loadingDisk = null;
 	}
 	
+	/**
+	 * Draws this RobotArm. Draws tower, the doors surrounding it, the arm, and the Disk the arm is holding.
+	 * @param g the Graphics object to be drawn upon
+	 */
 	public void draw(Graphics g) {
 		//Draw the Doors
 		g.setColor(Color.BLACK);
@@ -68,7 +84,7 @@ public class RobotArm {
 		//g.fillRect((int)(stackPos.x - rad2*0.9), (int)(stackPos.y - rad2), (int)(rad2 * 1.9), 4);
 		
 		//Draw the Stack
-		if(phase == 4 || phase == 5) {
+		if(phase == Phases.OPEN || phase == Phases.GRAB_STACK) {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.translate(stackPos.x, stackPos.y - tower.getHeight());
 			g2.rotate(Math.PI);
@@ -78,7 +94,7 @@ public class RobotArm {
 			} catch(NoninvertibleTransformException e) {
 				e.printStackTrace();
 			}
-		} else if(phase == 6) {
+		} else if(phase == Phases.PLACE_STACK) {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.translate(currentPos.x, currentPos.y);
 			g2.rotate(Math.PI);
@@ -109,29 +125,33 @@ public class RobotArm {
 		}
 	}
 	
+	/**
+	 * Updates the positions of this - to be called before each repaint(). Moves this a step toward completion of its task to sort InputLine in into OutputLine out.
+	 * Depending upon the current phase that this is in, will move the arm or remove/add Stacks/Disks to in, out, or to tower as necessary.
+	 */
 	public void update() {
 		switch(phase) {
-			case 0:
+			case WAIT:
 				//if(in.getCompleted() && out.getCompleted()) {
 					processOneDisk();
 				//}
 				break;
-			case 1: //removing the disk
+			case REMOVE: //removing the disk
 				if(!moveXFirst()) {
 					loadingDisk = in.remove();
 					targetPos.setLocation(stackPos.x, stackPos.y - tower.getHeight() - Disk.HEIGHT);
-					phase ++;
+					phase = Phases.PLACE_INPUT;
 				}
 				break;
-			case 2: //placing it on the stack
+			case PLACE_INPUT: //placing it on the stack
 				if(!moveYFirst()) {
 					tower.push(loadingDisk);
 					loadingDisk = null;
-					phase = 0;
+					phase = Phases.WAIT;
 				}
 				break;
-			case 3: //rotating the stack/closing the doors
-				int doorWidth = (int)(MAX_STACK * Disk.HEIGHT * 0.81);
+			case CLOSE: //rotating the stack/closing the doors
+				int doorWidth = (int)(MAX_STACK * Disk.HEIGHT * 0.81); //the width of one door (of two)
 				doorWidth *= 1.6; //deliberately longer than the actual doors in order to have a brief period when the doors appear to stay closed
 				if(moveYFirst()) {
 					//if the arm is moving
@@ -140,27 +160,27 @@ public class RobotArm {
 				} else if(doorProgress < doorWidth) {
 					doorProgress += SPEED;
 				} else {
-					phase ++;
+					phase = Phases.OPEN;
 					out.next(tower.getRadius());
 				}
 				break;
-			case 4: //opening the doors
+			case OPEN: //opening the doors
 				if(doorProgress != 0 && Math.abs(doorProgress - 0) <= SPEED) {
 					doorProgress = 0;
 				} else if(doorProgress > 0) {
 					doorProgress -= SPEED;
 				} else {
-					phase ++;
+					phase = Phases.GRAB_STACK;
 					targetPos.setLocation(stackPos.x, stackPos.y - tower.getHeight());
 				}
 				break;
-			case 5: //grabbing the newly rotated stack
+			case GRAB_STACK: //grabbing the newly rotated stack
 				if(!moveYFirst()) {
-					phase ++;
-					targetPos.setLocation(out.getX() + tower.getRadius() + out.BUFFER, out.getY() - tower.getHeight());
+					phase = Phases.PLACE_STACK;
+					targetPos.setLocation(out.getX() + tower.getRadius() + AssemblyLine.BUFFER, out.getY() - tower.getHeight());
 				}
 				break;
-			case 6: //placing the stack onto the output
+			case PLACE_STACK: //placing the stack onto the output
 				if(!moveXFirst()) {
 					//move our tower into the outputline
 					Tower tempTower = new Tower();
@@ -170,12 +190,12 @@ public class RobotArm {
 					out.add(tempTower);
 					
 					targetPos.setLocation(pos.x, pos.y + 30);
-					phase ++;
+					phase = Phases.RETURN;
 				}
 				break;
-			case 7: //returning to original position
+			case RETURN: //returning to original position
 				if(!moveYFirst()) {
-					phase = 0;
+					phase = Phases.WAIT;
 				}
 				break;
 			default:
@@ -183,10 +203,12 @@ public class RobotArm {
 				
 		}
 	}
-			
-	//move with priority to x direction
-	//returns true if it was able to move, false otherwise
-	public boolean moveXFirst() {
+	
+	/**
+	 * Moves currentPos one step closer to targetPos, with priority to the x direction.
+	 * @return whether this was able to move (if it has not already reached targetPos)
+	 */
+	private boolean moveXFirst() {
 		if(targetPos.x != currentPos.x && Math.abs(targetPos.x - currentPos.x) <= SPEED) {
 			currentPos.x = targetPos.x;
 		} else if(targetPos.x > currentPos.x) {
@@ -204,10 +226,12 @@ public class RobotArm {
 		}
 		return true;
 	}
-	
-	//move with priority to y direction
-	//returns true if it was able to move, false otherwise
-	public boolean moveYFirst() {
+
+	/**
+	 * Moves currentPos one step closer to targetPos, with priority to the y direction.
+	 * @return whether this was able to move (if it has not already reached targetPos)
+	 */
+	private boolean moveYFirst() {
 		if(targetPos.y != currentPos.y && Math.abs(targetPos.y - currentPos.y) <= SPEED) {
 			currentPos.y = targetPos.y;
 		} else if(targetPos.y > currentPos.y) {
@@ -226,26 +250,38 @@ public class RobotArm {
 		return true;
 	}
 	
+	/**
+	 * Decides which phase to begin next, then sets the variables necessary to begin that phase.
+	 * Will determine whether to unload the next Disk, to unload tower, or to mark the progress as complete. To be called when phase == Phases.WAIT
+	 */
 	public void processOneDisk() {
 		if(!in.isEmpty() && (tower.empty() || (tower.compareTop(in.peek()) <= 0 && tower.size() < MAX_STACK))) {
 			//robotArm.push(input.remove());
-			phase = 1;
-			targetPos.setLocation(in.getX() - in.getFirst().getRadius() - in.BUFFER, in.getY() - Disk.HEIGHT);
+			phase = Phases.REMOVE;
+			targetPos.setLocation(in.getX() - in.getFirst().getRadius() - AssemblyLine.BUFFER, in.getY() - Disk.HEIGHT);
 			//addDisk(in.remove());
 		} else if(!tower.empty()){
 			//unloadRobot();
-			phase = 3;
+			phase = Phases.CLOSE;
 			targetPos.setLocation(stackPos.x, stackPos.y - (int)(MAX_STACK * Disk.HEIGHT * 1.3));
 		} else {
 			//Once the Disks have been processed completely:
-			phase = 8;
+			phase = Phases.DONE;
 		}
 	}
 	
+	/**
+	 * Will check and return whether the current phase is Phases.Done.
+	 * @return whether the current phase is Phases.DONE (whether this is complete)
+	 */
 	public boolean completed() {
-		return phase == 8;
+		return phase == Phases.DONE;
 	}
 	
+	/**
+	 * Getter for this.Tower
+	 * @return Tower
+	 */
 	public Tower getTower() {
 		return tower;
 	}
