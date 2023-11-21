@@ -27,15 +27,37 @@ public class Tower extends Stack<Disk> {
 	}
 	
 	public void draw(int x, int y, Graphics g) {
-		
+		for(Disk d : this) {
+			y -= Disk.HEIGHT;
+			d.draw(x - d.getRadius(), y, g);
+		}
+	}
+	
+	public int getRadius() {
+		int r = 0;
+		for(Disk d : this) {
+			if(r < d.getRadius()) {
+				r = d.getRadius();
+			}
+		}
+		return r;
+	}
+	
+	public int size() {
+		int s = 0;
+		for(Disk d : this) {
+			s++;
+		}
+		return s;
 	}
 	
 	public int getHeight() {
-		int h = 0;
-		for(Disk d : this) {
-			h += Disk.HEIGHT;
-		}
-		return h;
+		return size() * Disk.HEIGHT;
 	}
 	
+	public void clear() {
+		while(!empty()) {
+			pop();
+		}
+	}
 }

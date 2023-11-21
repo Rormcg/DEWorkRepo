@@ -5,7 +5,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -19,13 +18,13 @@ public class InputLine extends LinkedList<Disk> {
 	
 	public final int HEIGHT = 30; //the height of the tread
 	public final int BUFFER = 10; //Space between elements in the line
-	public final int SPEED = 1; //How fast the line will move
+	public final int SPEED = ProductionLine.SPEED / 2 + 1; //How fast the line will move
 	public final int ROTATIONSPEED = SPEED * 2; //How fast the cog will spin
 	
 	public InputLine(int y) {
 		super();
 		this.y = y;
-		x = 200; 
+		x = 300; 
 		currentX = x;
 		completed = true;
 		rotation = 0;

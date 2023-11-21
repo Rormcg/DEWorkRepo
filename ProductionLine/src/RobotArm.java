@@ -3,10 +3,14 @@
  */
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.geom.NoninvertibleTransformException;
 
-public class RobotArm extends Tower {
+public class RobotArm {
+	private Tower tower;
+	
 	private InputLine in;
 	private OutputLine out;
 	
@@ -14,27 +18,31 @@ public class RobotArm extends Tower {
 	//0 = awaiting next phase
 	//1 = removing Disk from input
 	//2 = placing Disk from input onto the Stack
-	//3 = rotating the Stack
-	//4 = placing the rotated Stack onto the output
-	//5 = returning to original position
-	//6 = completely done
+	//3 = rotating the Stack (closing the doors)
+	//4 = opening the doors
+	//5 = grabbing the rotated Stack
+	//6 = placing the rotated Stack onto the output
+	//7 = returning to original position
+	//8 = completely done
 	
 	private final Point pos; //the constant center position
 	private final Point stackPos; //the constant position of this RobotArm's stack of Disks
 	private Point currentPos;
 	private Point targetPos;
 	
+	private int doorProgress; //shows the amount the stack doors have until closed
 	private Disk loadingDisk;
 	
-	public final int SPEED = 2;
+	public final int MAX_STACK = 10; //the most Disks this is willing to include in a single stack
+	public final int SPEED = ProductionLine.SPEED;
 	
 	public RobotArm(int x, int y, InputLine input, OutputLine output) {
-		super();
+		tower = new Tower();
 		
 		pos = new Point(x, y);
 		currentPos = new Point(pos.x, pos.y + 30);
 		targetPos = new Point(currentPos);
-		stackPos = new Point(pos.x, pos.y + 100);
+		stackPos = new Point(pos.x, pos.y + MAX_STACK * Disk.HEIGHT + 120);
 		
 		in = input;
 		out = output;
@@ -44,6 +52,49 @@ public class RobotArm extends Tower {
 	}
 	
 	public void draw(Graphics g) {
+		//Draw the Doors
+		g.setColor(Color.BLACK);
+		int rad = (int)(MAX_STACK * Disk.HEIGHT * 0.9);
+		g.fillRect(stackPos.x - rad, (int)(stackPos.y - rad * 1.4), rad * 2, rad * 2);
+		g.setColor(Color.WHITE);
+		int rad2 = (int)(rad * 0.9);
+		g.fillRect(stackPos.x - rad2, (int)(stackPos.y - rad * 1.4 + (rad - rad2)), rad2 * 2, rad2 * 2);
+		
+		g.setColor(Color.BLACK);
+		g.fillRect(stackPos.x - rad2, (int)(stackPos.y - rad * 1.4 + (rad - rad2)), doorProgress, rad2 * 2);//left door
+		g.fillRect(stackPos.x + rad2 - doorProgress, (int)(stackPos.y - rad * 1.4 + (rad - rad2)), doorProgress, rad2 * 2);//right door
+		
+		g.fillRect((int)(stackPos.x - rad2), stackPos.y, rad2 * 2, 4);//shelf
+		//g.fillRect((int)(stackPos.x - rad2*0.9), (int)(stackPos.y - rad2), (int)(rad2 * 1.9), 4);
+		
+		//Draw the Stack
+		if(phase == 4 || phase == 5) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.translate(stackPos.x, stackPos.y - tower.getHeight());
+			g2.rotate(Math.PI);
+			tower.draw(0, 0, g);
+			try {
+				g2.transform(g2.getTransform().createInverse());
+			} catch(NoninvertibleTransformException e) {
+				e.printStackTrace();
+			}
+		} else if(phase == 6) {
+			Graphics2D g2 = (Graphics2D)g;
+			g2.translate(currentPos.x, currentPos.y - tower.getHeight());
+			g2.rotate(Math.PI);
+			tower.draw(0, 0, g);
+			try {
+				g2.transform(g2.getTransform().createInverse());
+			} catch(NoninvertibleTransformException e) {
+				e.printStackTrace();
+			}
+		} else if(!tower.empty()) {
+			tower.draw(stackPos.x, stackPos.y, g);
+		}
+		
+		//maximum stack:
+		//g.fillRect(stackPos.x - 30, stackPos.y - 100, 60, 100);
+		
 		//Draw the Hand
 		g.setColor(Color.BLACK);
 		g.fillRect(pos.x - 350, pos.y - 10, 700, 10);
@@ -56,48 +107,76 @@ public class RobotArm extends Tower {
 			//Draw the loadingDisk
 			loadingDisk.draw(currentPos.x - loadingDisk.getRadius(), currentPos.y, g);
 		}
-		
-		//Draw the Pile
-		draw(stackPos.x, stackPos.y, g);
 	}
 	
 	public void update() {
 		switch(phase) {
 			case 0:
-				if(in.getCompleted() && out.getCompleted()) {
+				//if(in.getCompleted() && out.getCompleted()) {
 					processOneDisk();
-				}
+				//}
 				break;
 			case 1: //removing the disk
 				if(!moveXFirst()) {
 					loadingDisk = in.remove();
-					targetPos.setLocation(stackPos.x, stackPos.y - super.getHeight());
-					phase = 2;
+					targetPos.setLocation(stackPos.x, stackPos.y - tower.getHeight() - Disk.HEIGHT);
+					phase ++;
 				}
 				break;
 			case 2: //placing it on the stack
 				if(!moveYFirst()) {
-					push(loadingDisk);
+					tower.push(loadingDisk);
 					loadingDisk = null;
 					phase = 0;
 				}
 				break;
-			case 3: //rotating the stack
-				if(!moveYFirst()) {
-					
+			case 3: //rotating the stack/closing the doors
+				if(moveYFirst()) {
+					//if the arm is moving
+				} else if (doorProgress != (int)(MAX_STACK * Disk.HEIGHT * 0.81) && Math.abs(doorProgress - (int)(MAX_STACK * Disk.HEIGHT * 0.81)) <= SPEED) {
+					doorProgress = (int)(MAX_STACK * Disk.HEIGHT * 0.81);
+				} else if(doorProgress < (int)(MAX_STACK * Disk.HEIGHT * 0.81)) {
+					doorProgress += SPEED;
+				} else {
+					phase ++;
+					out.next(tower.getRadius());
 				}
 				break;
-			case 4: //placing the stack onto the output
+			case 4: //opening the doors
+				if(doorProgress != 0 && Math.abs(doorProgress - 0) <= SPEED) {
+					doorProgress = 0;
+				} else if(doorProgress > 0) {
+					doorProgress -= SPEED;
+				} else {
+					phase ++;
+					targetPos.setLocation(stackPos.x, stackPos.y - tower.getHeight());
+				}
+				break;
+			case 5: //grabbing the newly rotated stack
+				if(!moveYFirst()) {
+					phase ++;
+					targetPos.setLocation(out.getX() + in.getLast().getRadius()*2 + out.BUFFER, out.getY() - tower.getHeight() );//- Disk.HEIGHT);
+				}
+				break;
+			case 6: //placing the stack onto the output
 				if(!moveXFirst()) {
+					//move our tower into the outputline
+					Tower tempTower = new Tower();
+					while(!tower.empty()) {
+						tempTower.push(tower.pop());
+					}
+					out.add(tempTower);
 					
+					targetPos.setLocation(pos.x, pos.y + 30);
+					phase ++;
 				}
 				break;
-			case 5: //returning to original position
+			case 7: //returning to original position
 				if(!moveYFirst()) {
-					phase = 6;
+					phase = 0;
 				}
 				break;
-			case 6:
+			case 8:
 				
 		}
 	}
@@ -145,25 +224,27 @@ public class RobotArm extends Tower {
 	}
 	
 	public void processOneDisk() {
-		if(!in.isEmpty()) {
-			if(empty() || compareTop(in.peek()) <= 0) {
-				//robotArm.push(input.remove());
-				System.out.println("H");
-				phase = 1;
-				targetPos.setLocation(in.getX() - in.getFirst().getRadius() - in.BUFFER, in.getY() - Disk.HEIGHT);
-				//addDisk(in.remove());
-			} else {
-				//unloadRobot();
-				phase = 3;
-				targetPos.setLocation(stackPos.x, stackPos.y - 70);
-			}
+		if(!in.isEmpty() && tower.empty() || (tower.compareTop(in.peek()) <= 0 && tower.size() < MAX_STACK)) {
+			//robotArm.push(input.remove());
+			System.out.println("H");
+			phase = 1;
+			targetPos.setLocation(in.getX() - in.getFirst().getRadius() - in.BUFFER, in.getY() - Disk.HEIGHT);
+			//addDisk(in.remove());
+		} else if(!tower.empty()){
+			//unloadRobot();
+			phase = 3;
+			targetPos.setLocation(stackPos.x, stackPos.y - (int)(MAX_STACK * Disk.HEIGHT * 1.3));
 		} else {
 			//Once the Disks have been processed completely:
-			
+			phase = 8;
 		}
 	}
 	
-	public boolean getCompleted() {
-		return phase == 6;
+	public boolean completed() {
+		return phase == 8;
+	}
+	
+	public Tower getTower() {
+		return tower;
 	}
 }

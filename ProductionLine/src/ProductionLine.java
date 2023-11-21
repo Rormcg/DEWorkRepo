@@ -21,13 +21,14 @@ public class ProductionLine extends JComponent implements ActionListener {
 	private JFrame frame;
 	private Timer timer;
 	
+	public final static int SPEED = 4;
 	public final int WIDTH = 900, HEIGHT = 400;
-	public final int TREADHEIGHT = 250;
+	public final int TREADHEIGHT = 300;
 	
 	public ProductionLine(boolean noGraphics) {
 		input = new InputLine(TREADHEIGHT);
 		output = new OutputLine(TREADHEIGHT);
-		robotArm = new RobotArm(WIDTH / 2, HEIGHT / 10, input, output);
+		robotArm = new RobotArm(WIDTH / 2, HEIGHT / 20, input, output);
 		
 		if(!noGraphics) {
 			frame = new JFrame("ProductionLine");
@@ -54,8 +55,8 @@ public class ProductionLine extends JComponent implements ActionListener {
 	public void unloadRobot() {
 		Tower newTower = new Tower();
 		//System.out.print("Robot" + robotArm);
-		while(!robotArm.empty()) {
-			newTower.push(robotArm.pop());
+		while(!robotArm.getTower().empty()) {
+			newTower.push(robotArm.getTower().pop());
 		}
 		output.add(newTower);
 		//System.out.println(" NewTower" + newTower);
@@ -64,8 +65,8 @@ public class ProductionLine extends JComponent implements ActionListener {
 	//For Use with the non-graphical implementation
 	public void process() {
 		while(!input.isEmpty()) {
-			if(robotArm.empty() || robotArm.compareTop(input.peek()) <= 0) {
-				robotArm.push(input.remove());
+			if(robotArm.getTower().empty() || robotArm.getTower().compareTop(input.peek()) <= 0) {
+				robotArm.getTower().push(input.remove());
 			} else {
 				unloadRobot();
 			}
