@@ -97,7 +97,7 @@ public class RobotArm {
 		
 		//Draw the Hand
 		g.setColor(Color.BLACK);
-		g.fillRect(pos.x - 350, pos.y - 10, 700, 10);
+		g.fillRoundRect(pos.x - 350, pos.y - 10, 700, 10, 10, 10);
 		g.fillPolygon(new int[] {currentPos.x + 15, currentPos.x - 15, currentPos.x - 10, currentPos.x + 10}, new int[] {pos.y, pos.y, pos.y + 15, pos.y + 15}, 4);
 		
 		g.fillRect(currentPos.x - 10, pos.y + 15, 20, currentPos.y - pos.y - 30);

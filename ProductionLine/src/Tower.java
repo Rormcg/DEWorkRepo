@@ -2,12 +2,12 @@
  * @author Rory McGuire
  */
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Stack;
 
 public class Tower extends Stack<Disk> {
-	
+	private static final long serialVersionUID = 1L;
+
 	public Tower() {
 		super();
 	}
@@ -32,9 +32,6 @@ public class Tower extends Stack<Disk> {
 			y -= Disk.HEIGHT;
 			d.draw(x - d.getRadius(), y, g);
 		}
-		//g.setColor(Color.RED);
-		//g.drawRect(x - this.getRadius(), y, this.getRadius()*2, 1);
-		
 	}
 	
 	public int getRadius() {
@@ -46,15 +43,6 @@ public class Tower extends Stack<Disk> {
 		}
 		return r;
 	}
-	
-	/*
-	public int size() {
-		int s = 0;
-		for(Disk d : this) {
-			s++;
-		}
-		return s + (empty()?0:1);
-	}*/
 	
 	public int getHeight() {
 		return size() * Disk.HEIGHT;

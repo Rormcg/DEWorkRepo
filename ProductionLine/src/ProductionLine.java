@@ -14,6 +14,8 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 public class ProductionLine extends JComponent implements ActionListener {
+	private static final long serialVersionUID = 1L;
+	
 	private InputLine input;
 	private OutputLine output;
 	private RobotArm robotArm;
@@ -23,7 +25,7 @@ public class ProductionLine extends JComponent implements ActionListener {
 	
 	private boolean completed;
 	
-	public final static int SPEED = 5;
+	public final static int SPEED = 8;
 	public final int WIDTH = 900, HEIGHT = 400;
 	public final int TREADHEIGHT = 300;
 	
@@ -36,7 +38,7 @@ public class ProductionLine extends JComponent implements ActionListener {
 		if(!noGraphics) {
 			frame = new JFrame("ProductionLine");
 			
-			frame.setSize(WIDTH, HEIGHT);
+			frame.setSize(WIDTH + 17, HEIGHT + 40);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setLocationRelativeTo(null);
 			frame.setVisible(true);

@@ -2,6 +2,8 @@
  * @author Rory McGuire
  */
 
+import java.awt.Point;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,49 +11,54 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
-public class OutputLine extends LinkedList<Tower> {
-	private boolean completed;
-	private int y; //the y of the top of the tread (not the top of the disks)
-	private int x; //x pos of the rightmost point when at rest
+public class OutputLine extends LinkedList<Tower> implements AssemblyLine {
+	private static final long serialVersionUID = 1L;
+	
+	private final Point POS; //x pos of the leftmost point when at rest, the y of the top of the tread (not the top of the Towers)
+	
+	private boolean completed; //whether this has finished moving into position
 	private int currentX; //actual position of the rightmost point while moving
-	private int targetX;
+	private int targetX; //The x that currentX is moving toward
 	private int rotation; //the rotation of the cog in degrees
 	
-	public final int HEIGHT = 30; //the height of the tread
-	public final int BUFFER = 12; //Space between elements in the line
-	public final int SPEED = ProductionLine.SPEED / 2 + 1; //How fast the line will move
-	public final int ROTATIONSPEED = SPEED * 2; //How fast the cog will spin
-	
+	/**
+	 * Constructor for the OutputLine class; assigns the int value to this.y and instantiates all other fields
+	 * @param y the value to be assigned to y - the y-pos of the tread
+	 */
 	public OutputLine(int y) {
 		super();
-		this.y = y;
-		x = 600; 
-		currentX = x;
+		POS = new Point(600, y); 
+		currentX = POS.x;
 		targetX = currentX;
 		completed = true;
 		rotation = 0;
 	}
 	
+	/**
+	 * Draws this OutputLine: draws the Towers, the tread, and the cogs in the tread
+	 * @param g the Graphics object to draw upon
+	 */
+	@Override
 	public void draw(Graphics g) {
-		//draw the disks
+		//draw the Towers
 		ListIterator<Tower> l = listIterator(size());
 		int tempX = currentX;
 		while(l.hasPrevious()) {
 			Tower prev = l.previous();
 			tempX += prev.getRadius() + BUFFER;
-			prev.draw(tempX, y, g);
+			prev.draw(tempX, POS.y, g);
 			tempX += prev.getRadius();
 		}
 		
 		//draw the assembly tread
 		g.setColor(Color.BLACK);
-		g.drawRoundRect(x, y, 330, HEIGHT, HEIGHT, HEIGHT);
+		g.drawRoundRect(POS.x, POS.y, 330, HEIGHT, HEIGHT, HEIGHT);
 		
 		Graphics2D g2 = (Graphics2D)g;
 		
 		//draw the cogs
-		for(double i = x + HEIGHT * 0.5; i <= 930; i += HEIGHT * 1.2) {
-			g2.translate(i, y + HEIGHT * 0.5);
+		for(double i = POS.x + HEIGHT * 0.5; i <= 930; i += HEIGHT * 1.2) {
+			g2.translate(i, POS.y + HEIGHT * 0.5);
 			g2.rotate(Math.toRadians(rotation + i));
 			g2.drawPolygon(new int[] {(int)(-HEIGHT * 0.4), (int)(-HEIGHT * 0.25), (int)(HEIGHT * 0.25), (int)(HEIGHT * 0.4), (int)(HEIGHT * 0.25), (int)(-HEIGHT * 0.25)},
 					new int[] {0, (int)(-HEIGHT * 0.35), (int)(-HEIGHT * 0.35), 0, (int)(HEIGHT * 0.35), (int)(HEIGHT * 0.35)}, 6);
@@ -61,12 +68,14 @@ public class OutputLine extends LinkedList<Tower> {
 			} catch(NoninvertibleTransformException e) {
 				e.printStackTrace();
 			}
-			//g2.translate(-i, -(y + HEIGHT * 0.5));
-			//g2.rotate(Math.toRadians(-rotation));
 		}
 		
 	}
 	
+	/**
+	 * Updates this OutputLine. Will move this a step toward the targetX and increase the cogs' rotation by one step if necessary. Only will do something if currentX != targetX.
+	 */
+	@Override
 	public void update() {
 		if(currentX < targetX) {
 			completed = false;
@@ -79,39 +88,60 @@ public class OutputLine extends LinkedList<Tower> {
 		}
 	}
 	
-	//for making room for the next tower
+	/**
+	 * Sets this up for moving forward to make room for a new Tower. Will set the targetX relative to the radius of the Tower to be added.
+	 * @param rad the radius of the next Tower that will be added to this
+	 */
 	public void next(int rad) {
 		targetX += rad*2 + BUFFER;
 		completed = false;
 	}
 	
-	//for when the robotarm places the tower in this
+	/**
+	 * Adds a new Tower to this. Resets the current x-pos of this to account for the new Tower.
+	 * Inherited from LinkedList&lt;Tower&gt;
+	 * @param t the Tower to be added to this
+	 * @return boolean indicating whether this method was successful
+	 */
 	@Override
 	public boolean add(Tower t) {
-		currentX = x;
+		currentX = POS.x;
 		targetX = currentX;
 		return super.add(t);
 	}
 	
+	/**
+	 * Returns this.completed (whether this has finished its motion)
+	 * @return completed
+	 */
 	@Override
-	public Tower remove() {
-		//completed = false;
-		//currentX = x - getFirst().getRadius() * 2 - BUFFER;
-		return super.remove();
-	}
-	
 	public boolean getCompleted() {
 		return completed;
 	}
 	
+	/**
+	 * Returns this.POS.x (the constant leftmost position of this)
+	 * @return POS.x
+	 */
+	@Override
 	public int getX() {
-		return x;
+		return POS.x;
 	}
 	
+	/**
+	 * Returns this.POS.y (the constant topmost position of the tread - not the top of the Towers)
+	 * @return POS.y
+	 */
+	@Override
 	public int getY() {
-		return y;
+		return POS.y;
 	}
 	
+	/**
+	 * Returns a String representation of this. Will return a formatted list of the Towers contained in this in First-Out-First order.
+	 * Format of String should be: "(FOF) \nTower 0: [1, 2, 3]\nTower 1: [6, 7, 8]"...etc.
+	 * @return String representation of this
+	 */
 	@Override
 	public String toString() {
 		String s = "(FOF) \n";//First-Out is displayed as "first" in the list
