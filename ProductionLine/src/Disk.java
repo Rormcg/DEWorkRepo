@@ -9,11 +9,13 @@ public class Disk implements Comparable<Disk> {
 	private int radius;
 	
 	public static final int LARGEST = 30;
-	public final int HEIGHT = 10;
+	public static final int SMALLEST = 5;
+	public static final int HEIGHT = 10;
 	public final Color COLOR = Color.BLACK;
 	
 	public Disk(int rad) {
-		if(rad >= LARGEST) throw new IllegalArgumentException("rad must be smaller than or equal to Disk.Largest");
+		if(rad > LARGEST) throw new IllegalArgumentException("rad must be smaller than or equal to Disk.LARGEST");
+		if(rad < SMALLEST) throw new IllegalArgumentException("rad must be greater than or equal to Disk.SMALLEST");
 		radius = rad;
 	}
 	

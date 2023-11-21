@@ -21,13 +21,13 @@ public class ProductionLine extends JComponent implements ActionListener {
 	private JFrame frame;
 	private Timer timer;
 	
-	public final int WIDTH = 500, HEIGHT = 400;
+	public final int WIDTH = 900, HEIGHT = 400;
 	public final int TREADHEIGHT = 250;
 	
 	public ProductionLine(boolean noGraphics) {
 		input = new InputLine(TREADHEIGHT);
 		output = new OutputLine(TREADHEIGHT);
-		robotArm = new RobotArm();
+		robotArm = new RobotArm(WIDTH / 2, HEIGHT / 10, input, output);
 		
 		if(!noGraphics) {
 			frame = new JFrame("ProductionLine");
@@ -72,21 +72,6 @@ public class ProductionLine extends JComponent implements ActionListener {
 		}
 	}
 	
-	public void processOneDisk() {
-		if(!input.isEmpty()) {
-			if(robotArm.empty() || robotArm.compareTop(input.peek()) <= 0) {
-				//robotArm.push(input.remove());
-				robotArm.addDisk(input.remove());
-			} else {
-				//unloadRobot();
-				robotArm.beginUnloading();
-			}
-		} else {
-			//Once the Disks have been processed completely:
-			
-		}
-	}
-	
 	public Tower removeTower() {
 		return output.remove();
 	}
@@ -97,6 +82,7 @@ public class ProductionLine extends JComponent implements ActionListener {
 	
 	@Override
 	public void paintComponent(Graphics g) {
+		//System.out.println(input);
 		input.draw(g);
 		output.draw(g);
 		robotArm.draw(g);
@@ -107,9 +93,6 @@ public class ProductionLine extends JComponent implements ActionListener {
 		input.update();
 		output.update();
 		robotArm.update();
-		if(input.getCompleted() && output.getCompleted() && robotArm.getCompleted()) {
-			processOneDisk();
-		}
 		repaint();
 	}
 	

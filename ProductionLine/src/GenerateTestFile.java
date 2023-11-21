@@ -23,7 +23,7 @@ public class GenerateTestFile {
 		}
 		
 		for(int i = 0; i < numDisks; i ++) {
-			p.print((int)(Math.random() * Disk.LARGEST + 1));
+			p.print((int)(Math.random() * (Disk.LARGEST - Disk.SMALLEST) + 1 + Disk.SMALLEST));
 			if(i < numDisks - 1)
 				p.println();
 		}
