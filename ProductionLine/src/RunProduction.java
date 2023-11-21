@@ -45,7 +45,14 @@ public class RunProduction {
 	 * will run on the command line only. If false, the program will run with graphics.
 	 */
 	public static void main(String[] args) {
-		if(args.length <= 0) throw new IllegalArgumentException("RunProduction.main() must run with an argument containing a filename");
+		String filename;
+		if(args.length <= 0) {
+			filename = "input.txt";
+			GenerateTestFile.main(new String[] {filename});
+			//throw new IllegalArgumentException("RunProduction.main() must run with an argument containing a filename");
+		} else {
+			filename = args[0];
+		}
 		
 		boolean runWithoutGraphics = false;
 		if(args.length > 1) {
@@ -54,7 +61,7 @@ public class RunProduction {
 			
 		ProductionLine production = new ProductionLine(runWithoutGraphics);
 		
-		readInDisks(production, args[0]);
+		readInDisks(production, filename);
 		
 		production.printInput();
 		

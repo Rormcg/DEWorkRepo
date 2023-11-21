@@ -131,11 +131,13 @@ public class RobotArm {
 				}
 				break;
 			case 3: //rotating the stack/closing the doors
+				int doorWidth = (int)(MAX_STACK * Disk.HEIGHT * 0.81);
+				doorWidth *= 1.6; //deliberately longer than the actual doors in order to have a brief period when the doors appear to stay closed
 				if(moveYFirst()) {
 					//if the arm is moving
-				} else if (doorProgress != (int)(MAX_STACK * Disk.HEIGHT * 0.81) && Math.abs(doorProgress - (int)(MAX_STACK * Disk.HEIGHT * 0.81)) <= SPEED) {
-					doorProgress = (int)(MAX_STACK * Disk.HEIGHT * 0.81);
-				} else if(doorProgress < (int)(MAX_STACK * Disk.HEIGHT * 0.81)) {
+				} else if (doorProgress != doorWidth && Math.abs(doorProgress - doorWidth) <= SPEED) {
+					doorProgress = doorWidth;
+				} else if(doorProgress < doorWidth) {
 					doorProgress += SPEED;
 				} else {
 					phase ++;

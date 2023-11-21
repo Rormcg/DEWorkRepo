@@ -97,7 +97,7 @@ public class InputLine extends LinkedList<Disk> {
 	
 	@Override
 	public String toString() {
-		String s = "(FOF) Disk Radii: [";//First-Out is displayed as "first" in the list
+		String s = "(FOF) Disk Radii: [";//First-Out is displayed as "first" (index 0) in the list
 		int count = 0;
 		for(Disk d : this) {
 			//s +=  count + ": ";

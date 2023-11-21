@@ -23,7 +23,7 @@ public class ProductionLine extends JComponent implements ActionListener {
 	
 	private boolean completed;
 	
-	public final static int SPEED = 10;
+	public final static int SPEED = 5;
 	public final int WIDTH = 900, HEIGHT = 400;
 	public final int TREADHEIGHT = 300;
 	
