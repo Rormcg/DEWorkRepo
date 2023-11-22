@@ -1,13 +1,17 @@
-/**
- * @author Rory McGuire
- */
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.geom.NoninvertibleTransformException;
 
+/**
+ * Represents a robot arm that selects and sorts Disks.
+ * Contains an arm, a Tower, and the doors for the Tower, as well as references to the InputLine and OutputLine to be modified/sorted.
+ * Will switch between a series of phases in order to carry out a series of steps necessary to sort the Disks.
+ * Can create a graphical representation of this RobotArm, which includes the arm, any Disk that the arm is currently carrying,
+ * the Tower, and the box with doors around the Tower.
+ * @author Rory McGuire
+ */
 public class RobotArm {
 	private Tower tower;
 	

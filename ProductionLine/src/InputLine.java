@@ -1,7 +1,3 @@
-/**
- * @author Rory McGuire
- */
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,6 +6,14 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+/**
+ * Represents an assembly line of Disks.
+ * Functions as the input for the ProductionLine class.
+ * Can create a graphical representation of itself as an assembly line that can move to the right as Disks are removed.
+ * @extends LinkedList&lt;Disk&gt;
+ * @implements AssemblyLine
+ * @author Rory McGuire
+ */
 public class InputLine extends LinkedList<Disk> implements AssemblyLine {
 	private static final long serialVersionUID = 1L;
 	

@@ -1,9 +1,5 @@
-/**
- * @author Rory McGuire
- */
-
-
 import java.awt.Color;
+
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -12,6 +8,18 @@ import javax.swing.Timer;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+
+/**
+ * Main class for the ProductionLine Project.
+ * Organizes the project components into a cohesive unit; however DOES NOT run the program.
+ * Specifically, ProductionLine contains an InputLine, an OutputLine, and a RobotArm
+ * Contains functionality for both a graphical and a command-line version of ProductionLine.
+ * For the graphical portion, ProductionLine holds a JFrame and associated objects necessary for displaying graphics.
+ * Additionally, this class contains a Timer, which it uses with its implementation of ActionListener in order to coordinate changes/updates to this class's components
+ * and to repaint the canvas.
+ * @extends ActionListener to detect the firing of the Timer used to determine when to update and repaint.
+ * @author Rory McGuire
+ */
 
 public class ProductionLine extends JComponent implements ActionListener {
 	private static final long serialVersionUID = 1L;
@@ -29,13 +37,18 @@ public class ProductionLine extends JComponent implements ActionListener {
 	public final int WIDTH = 900, HEIGHT = 400;
 	public final int TREADHEIGHT = 300;
 	
-	public ProductionLine(boolean noGraphics) {
+	/**
+	 * Constructor for a ProductionLine object. Initializes the fields of the new object, and determines whether the object will be used for Graphics.
+	 * If to be used for Graphics, this object will create and display a JFrame to display Graphics.
+	 * @param graphics whether this ProductionLine will run with Graphics
+	 */
+	public ProductionLine(boolean graphics) {
 		input = new InputLine(TREADHEIGHT);
 		output = new OutputLine(TREADHEIGHT);
 		robotArm = new RobotArm(WIDTH / 2, HEIGHT / 20, input, output);
 		completed = false;
 		
-		if(!noGraphics) {
+		if(graphics) {
 			frame = new JFrame("ProductionLine");
 			
 			frame.setSize(WIDTH + 17, HEIGHT + 40);
@@ -48,15 +61,29 @@ public class ProductionLine extends JComponent implements ActionListener {
 			content.add(this);
 			
 			timer = new Timer(1, this);
-			timer.start();
 		}
 	}
 	
+	/**
+	 * Called when this should begin to run.<br> Begins the updating process for this: calls timer.start().
+	 * (Used to avoid conflicts due to back-end multi-threading with this.actionPerformed() being called at the same time that input Disks are being added)
+	 */
+	public void start() {
+		timer.start();
+	}
+	
+	/**
+	 * Adds a Disk to input
+	 * @param d the Disk to be added
+	 */
 	public void addDisk(Disk d) {
 		input.add(d);
 	}
 	
-	//For use with the non-graphical implementation
+	/**
+	 * "Unloads" robotArm. Reverses robotArm's Tower and places the new Tower into output.
+	 * To be used with the non-graphical implementation of ProductionLine.
+	 */
 	public void unloadRobot() {
 		Tower newTower = new Tower();
 		//System.out.print("Robot" + robotArm);
@@ -66,8 +93,11 @@ public class ProductionLine extends JComponent implements ActionListener {
 		output.add(newTower);
 		//System.out.println(" NewTower" + newTower);
 	}
-	
-	//For Use with the non-graphical implementation
+	/**
+	 * Runs the algorithm to sort input Disks into ascending Towers in output.
+	 * Places Disks into robotArm.tower until the Disk is smaller than the top Disk on robotArm.tower. Then flips the Tower and places it in output.
+	 * To be used with the non-graphical implementation.
+	 */
 	public void process() {
 		while(!input.isEmpty()) {
 			if(robotArm.getTower().empty() || robotArm.getTower().compareTop(input.peek()) <= 0) {
@@ -78,14 +108,26 @@ public class ProductionLine extends JComponent implements ActionListener {
 		}
 	}
 	
+	/**
+	 * Removes and returns a Tower from output
+	 * @return the removed Tower
+	 */
 	public Tower removeTower() {
 		return output.remove();
 	}
 	
+	/**
+	 * Getter for output.isEmpty(). Returns whether output has no elements.
+	 * @return output.isEmpty()
+	 */
 	public boolean outputIsEmpty() {
 		return output.isEmpty();
 	}
 	
+	/**
+	 * Draws the components of this: Draws the InputLine, the OutputLine, and the RobotArm.
+	 * @param g the Graphics object to be drawn upon
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		//System.out.println(input);
@@ -94,6 +136,11 @@ public class ProductionLine extends JComponent implements ActionListener {
 		robotArm.draw(g);
 	}
 	
+	/**
+	 * Updates the components of this, repaints them, and then verifies if this process has been completed.
+	 * If so, will end the Timer causing this method to be called and thus will stop updating.
+	 * @param ActionEvent that triggers this method to be called. Will be this.timer firing.
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		input.update();
@@ -105,13 +152,20 @@ public class ProductionLine extends JComponent implements ActionListener {
 			//print out the output:
 			printOutput();
 			completed = true;
+			timer.stop();
 		}
 	}
 	
+	/**
+	 * Prints out a String representation of output.
+	 */
 	public void printOutput() {
-		System.out.println("Output: \n" + output);
+		System.out.println("Output: " + output);
 	}
 	
+	/**
+	 * Prints out a String representation of input.
+	 */
 	public void printInput() {
 		System.out.println("Input: \n" + input);
 	}

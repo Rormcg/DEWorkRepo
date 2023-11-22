@@ -1,10 +1,10 @@
-/**
- * @author Rory McGuire
- * Interface to be used as template for InputLine and OutputLine class
- */
-
 import java.awt.Graphics;
 
+/**
+ * Interface to be used as template for InputLine and OutputLine class.<br>
+ * Contains the methods and constants shared by the two classes.
+ * @author Rory McGuire
+ */
 public interface AssemblyLine {
 	public final int HEIGHT = 30; //the height of the tread
 	public final int BUFFER = 12; //Space between elements in the line

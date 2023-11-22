@@ -1,13 +1,22 @@
-/**
- * @author Rory McGuire
- */
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Runs the ProductionLine project.
+ * Contains functionality to run both the Graphical and non-Graphical implementations by instantiating a ProductionLine object and calling its methods.
+ * Based on the given arguments to main, RunProduction will use a file for input or generate a new random file to use.
+ * The second argument will decide whether to run with Graphics.
+ * @author Rory McGuire
+ */
 public class RunProduction {
 	
+	/**
+	 * Fills in a ProductionLine's input based on the contents of a file.
+	 * Reads in the values of Disk radii from a given file, then uses them to instantiate Disk objects that it then places into the production.input InputLine.
+	 * @param production the ProductionLine to be modified
+	 * @param filename the relative filepath of the file to be read in
+	 */
 	public static void readInDisks(ProductionLine production, String filename) {
 		File f = new File(filename);
 		Scanner s = null;
@@ -25,16 +34,24 @@ public class RunProduction {
 		s.close();
 	}
 	
-	//For use with the non-graphical implementation
+	/**
+	 * Runs the given ProductionLine's non-Graphical algorithm, then removes and prints out the output of the algorithm.
+	 * @param production the ProductionLine to be run
+	 */
 	public static void runProduction(ProductionLine production) {
 		production.process();
-		
-		String out = "";
+		///*
+		String out = "Output: (FOF)\n";
+		int count = 0;
 		while(!production.outputIsEmpty()) {
-			out += production.removeTower() + "\n";
+			out += "Tower " + count + ": " + production.removeTower() + "\n";
+			count++;
 		}
 		
 		System.out.println(out.trim());
+		//*/
+		//production.printOutput();
+		
 	}
 	
 	/**
@@ -59,7 +76,7 @@ public class RunProduction {
 			runWithoutGraphics = Boolean.parseBoolean(args[1]);
 		}
 			
-		ProductionLine production = new ProductionLine(runWithoutGraphics);
+		ProductionLine production = new ProductionLine(!runWithoutGraphics);
 		
 		readInDisks(production, filename);
 		
@@ -67,6 +84,8 @@ public class RunProduction {
 		
 		if(runWithoutGraphics) {
 			runProduction(production);
+		} else {
+			production.start();
 		}
 	}
 

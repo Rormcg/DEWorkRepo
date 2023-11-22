@@ -1,13 +1,12 @@
+import java.awt.Color;
+import java.awt.Graphics;
+
 /**
  * Represents a single "disk" with a radius value.
  * To be used within InputLine, Tower, and RobotArm to represent an "element" containing a single int value.
  * @author Rory McGuire
  * @implements Comparable&lt;Disk&gt;
  */
-
-import java.awt.Color;
-import java.awt.Graphics;
-
 public class Disk implements Comparable<Disk> {
 	private int radius;
 	

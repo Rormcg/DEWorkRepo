@@ -1,7 +1,3 @@
-/**
- * @author Rory McGuire
- */
-
 import java.awt.Point;
 
 import java.awt.Color;
@@ -11,6 +7,14 @@ import java.awt.geom.NoninvertibleTransformException;
 import java.util.LinkedList;
 import java.util.ListIterator;
 
+/**
+ * Represents an assembly line of Towers.
+ * Functions as the output for the ProductionLine class.
+ * Can create a graphical representation of itself as an assembly line that can move to the left as Disks are added.
+ * @extends LinkedList&lt;Tower&gt;
+ * @implements AssemblyLine
+ * @author Rory McGuire
+ */
 public class OutputLine extends LinkedList<Tower> implements AssemblyLine {
 	private static final long serialVersionUID = 1L;
 	
