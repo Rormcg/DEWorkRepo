@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 
 /**
  * 
@@ -12,17 +12,68 @@ import java.io.IOException;
 
 public class Knapsack {
 	
-	public static void main(String[] args) {
-		String filename = "";
-		File f = new File(filename);
-		try {
-			Scanner s = new Scanner(f);
-		} catch(IOException e) {
-			e.printStackTrace();
+	public static void main(String...args) {
+		int[] limits = new int[args.length];
+		ArrayList<ArrayList<Integer>> weight = new ArrayList<ArrayList<Integer>>();
+		int[] arrLengths = new int[args.length];
+		
+		//read in files
+		File f = null;
+		Scanner s = null;
+		for(int i = 0; i < args.length; i++) {
+			weight.set(i, new ArrayList<Integer>());
+			
+			f = new File(args[i]);
+			try {
+				s = new Scanner(f);
+			} catch(FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			if(s.hasNext()) {
+				limits[i] = s.nextInt();
+			}
+			
+			int count = 0;
+			while(s.hasNext()) {
+				arrLengths[i] ++;
+				count ++;
+				weight.get(i).set(count, s.nextInt());
+			}
 		}
 		
-		//int[] numbers = new int[];
+		int maxLength = 0; //find the longest array in order to set the upper length limit
+		for(int i = 0; i < arrLengths.length; i++) {
+			if(arrLengths[i] > maxLength) maxLength = arrLengths[i];
+		}
 		
+		//convert ArrayLists into arrays
+		int[][] weights = new int[args.length][maxLength];
+		int i = 0;
+		while(weight.size() != 0) {
+			int j = 0;
+			while(weight.get(0).size() != 0) {
+				weights[i][j] = weight.get(0).remove(0);
+				j++;
+			}
+			weight.remove(0);
+			i++;
+		}
+		
+		for(int j = 0; j < weights.length; j++) {
+			System.out.println(knapsackOutput(weights[j], arrLengths[j], limits[j]));
+		}
+	}
+	
+	private static String knapsackOutput(int[] w, int n, int limit) {
+		String s = limit + "\t";
+		for(int i = 0; i < w.length; i++) {
+			s += w[i] + ", ";
+		}
+		s = s.substring(0, s.length() - 2) + "\n\n";
+		
+		
+		return s;
 	}
 	
 	public static int knapsackSum(int[] w, int n, int limit) {
