@@ -2,17 +2,21 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.io.PrintWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
- * 
+ * Static class designed to solve the knapsack problem:<br>
+ * Take a set of values, determine which combination of those values is the greatest without going over a given limit
  * @author Rory McGuire
  */
-
 public class Knapsack {
 	
+	/**
+	 * Point from which the Knapsack program runs.
+	 * Will read in values from a series of given files and print out the results.
+	 * @param args the filenames for input files
+	 */
 	public static void main(String[] args) {
 		int[] limits = new int[args.length];
 		ArrayList<ArrayList<Integer>> weight = new ArrayList<ArrayList<Integer>>();
@@ -64,6 +68,14 @@ public class Knapsack {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param filename
+	 * @param w
+	 * @param n
+	 * @param limit
+	 * @return
+	 */
 	private static String knapsackOutput(String filename, int[] w, int n, int limit) {
 		String s = filename + " " + limit + "\t";
 		for(int i = 0; i < w.length; i++) {
@@ -80,6 +92,13 @@ public class Knapsack {
 		return s.trim();
 	}
 	
+	/**
+	 * 
+	 * @param w
+	 * @param n
+	 * @param limit
+	 * @return
+	 */
 	public static int knapsackSum(int[] w, int n, int limit) {
 		if(limit < 0) return 0;
 		if(n == 1) {
@@ -97,6 +116,14 @@ public class Knapsack {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param w
+	 * @param n
+	 * @param limit
+	 * @param list
+	 * @return
+	 */
 	public static int knapsackSum(int[] w, int n, int limit, List<Integer> list) {
 		if(limit < 0) return 0;
 		if(n == 1) {
