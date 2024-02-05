@@ -52,19 +52,15 @@ public class Knapsack {
 		
 		//convert ArrayLists into arrays
 		int[][] weights = new int[args.length][maxLength];
-		int i = 0;
-		while(weight.size() != 0) {
-			int j = 0;
-			while(weight.get(0).size() != 0) {
-				weights[i][j] = weight.get(0).remove(0);
-				j++;
+		for(int i = 0; i < weight.size(); i++) {
+			for(int j = 0; j < weight.get(i).size(); j++) {
+				weights[i][j] = weight.get(i).get(j);
 			}
-			weight.remove(0);
-			i++;
 		}
 		
 		for(int j = 0; j < weights.length; j++) {
-			System.out.println(knapsackOutput(args[j], weights[j], arrLengths[j], limits[j]));
+			System.out.println(knapsackOutput(args[j], weights[j], arrLengths[j], limits[j]) + "\n");
+			//System.out.println(knapsackOutputLess(args[j], weights[j], arrLengths[j], limits[j]) + "\n");
 		}
 	}
 	
@@ -78,10 +74,10 @@ public class Knapsack {
 	 */
 	private static String knapsackOutput(String filename, int[] w, int n, int limit) {
 		String s = filename + " " + limit + "\t";
-		for(int i = 0; i < w.length; i++) {
+		for(int i = 0; i < n; i++) {
 			s += w[i] + ", ";
 		}
-		s = s.substring(0, s.length() - 2) + "\n\n";
+		s = s.substring(0, s.length() - 2) + "\n";
 		
 		LinkedList<Integer> melons = new LinkedList<Integer>();
 		int sum = knapsackSum(w, n, limit, melons);
@@ -89,7 +85,26 @@ public class Knapsack {
 			s += m + " pound watermelon\n";
 		}
 		
-		return s.trim();
+		return s + "Total: " + sum + (sum == 1 ? " pound" : " pounds");
+	}
+	
+	/**
+	 * 
+	 * @param filename
+	 * @param w
+	 * @param n
+	 * @param limit
+	 * @return
+	 */
+	private static String knapsackOutputLess(String filename, int[] w, int n, int limit) {
+		String s = filename + " " + limit + "\t";
+		for(int i = 0; i < n; i++) {
+			s += w[i] + ", ";
+		}
+		s = s.substring(0, s.length() - 2) + "\n";
+		
+		int sum = knapsackSum(w, n, limit);
+		return s + "Total: " + sum + (sum == 1 ? " pound" : " pounds");
 	}
 	
 	/**
@@ -109,7 +124,6 @@ public class Knapsack {
 		int valueWithout = knapsackSum(w, n - 1, limit);
 		
 		if(valueWith > valueWithout) {
-			//list.add(w[n-1]);
 			return valueWith + w[n-1];
 		} else {
 			return valueWithout;
@@ -125,9 +139,13 @@ public class Knapsack {
 	 * @return
 	 */
 	public static int knapsackSum(int[] w, int n, int limit, List<Integer> list) {
-		if(limit < 0) return 0;
+		if(limit <= 0) return 0;
 		if(n == 1) {
-			return w[n-1] < limit ? w[n-1] : 0;
+			if(w[n-1] < limit) {
+				list.add(w[n-1]);
+				return w[n-1];
+			}
+			return 0;
 		}
 		
 		ArrayList<Integer> list1 = new ArrayList<Integer>(list);
@@ -138,7 +156,7 @@ public class Knapsack {
 		int valueWithout = knapsackSum(w, n - 1, limit, list2);
 		
 		if(valueWith > valueWithout) {
-			//list.add(w[n-1]);
+			
 			list.addAll(list1);
 			return valueWith + w[n-1];
 			
