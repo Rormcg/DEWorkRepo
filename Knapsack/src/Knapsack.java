@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.io.PrintWriter;
@@ -12,7 +13,7 @@ import java.io.FileNotFoundException;
 
 public class Knapsack {
 	
-	public static void main(String...args) {
+	public static void main(String[] args) {
 		int[] limits = new int[args.length];
 		ArrayList<ArrayList<Integer>> weight = new ArrayList<ArrayList<Integer>>();
 		int[] arrLengths = new int[args.length];
@@ -21,7 +22,7 @@ public class Knapsack {
 		File f = null;
 		Scanner s = null;
 		for(int i = 0; i < args.length; i++) {
-			weight.set(i, new ArrayList<Integer>());
+			weight.add(new ArrayList<Integer>());
 			
 			f = new File(args[i]);
 			try {
@@ -34,15 +35,13 @@ public class Knapsack {
 				limits[i] = s.nextInt();
 			}
 			
-			int count = 0;
 			while(s.hasNext()) {
 				arrLengths[i] ++;
-				count ++;
-				weight.get(i).set(count, s.nextInt());
+				weight.get(i).add(s.nextInt());
 			}
 		}
 		
-		int maxLength = 0; //find the longest array in order to set the upper length limit
+		int maxLength = 0; //find the longest array in order to set the upper array length limit
 		for(int i = 0; i < arrLengths.length; i++) {
 			if(arrLengths[i] > maxLength) maxLength = arrLengths[i];
 		}
@@ -61,19 +60,24 @@ public class Knapsack {
 		}
 		
 		for(int j = 0; j < weights.length; j++) {
-			System.out.println(knapsackOutput(weights[j], arrLengths[j], limits[j]));
+			System.out.println(knapsackOutput(args[j], weights[j], arrLengths[j], limits[j]));
 		}
 	}
 	
-	private static String knapsackOutput(int[] w, int n, int limit) {
-		String s = limit + "\t";
+	private static String knapsackOutput(String filename, int[] w, int n, int limit) {
+		String s = filename + " " + limit + "\t";
 		for(int i = 0; i < w.length; i++) {
 			s += w[i] + ", ";
 		}
 		s = s.substring(0, s.length() - 2) + "\n\n";
 		
+		LinkedList<Integer> melons = new LinkedList<Integer>();
+		int sum = knapsackSum(w, n, limit, melons);
+		for(Integer m: melons) {
+			s += m + " pound watermelon\n";
+		}
 		
-		return s;
+		return s.trim();
 	}
 	
 	public static int knapsackSum(int[] w, int n, int limit) {
@@ -108,11 +112,12 @@ public class Knapsack {
 		
 		if(valueWith > valueWithout) {
 			//list.add(w[n-1]);
-			return valueWith + w[n-1];
 			list.addAll(list1);
+			return valueWith + w[n-1];
+			
 		} else {
-			return valueWithout;
 			list.addAll(list2);
+			return valueWithout;
 		}
 	}
 }
