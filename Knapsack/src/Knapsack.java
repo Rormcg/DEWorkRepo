@@ -65,12 +65,13 @@ public class Knapsack {
 	}
 	
 	/**
-	 * 
-	 * @param filename
-	 * @param w
-	 * @param n
-	 * @param limit
-	 * @return
+	 * Runs knapsackSum() with the given parameters and generates a String output
+	 * (for the knapsackSum() method with a List parameter). 
+	 * @param filename the name of the file the input was taken from
+	 * @param w the list of int values to test the knapsack problem on
+	 * @param n the number of values in w to be used
+	 * @param limit the largest possible value that can be reached in calculating the knapsack problem
+	 * @return the String output for the knapsackSum() method
 	 */
 	public static String knapsackOutput(String filename, int[] w, int n, int limit) {
 		String s = filename + " " + limit + "\t";
@@ -89,12 +90,13 @@ public class Knapsack {
 	}
 	
 	/**
-	 * 
-	 * @param filename
-	 * @param w
-	 * @param n
-	 * @param limit
-	 * @return
+	 * Runs knapsackSum() with the given parameters and generates a String output
+	 * (for the knapsackSum() method without a List parameter - will NOT include the list of values used, just the final sum). 
+	 * @param filename the name of the file the input was taken from
+	 * @param w the list of int values to test the knapsack problem on
+	 * @param n the number of values in w to be used
+	 * @param limit the largest possible value that can be reached in calculating the knapsack problem
+	 * @return the String output for the knapsackSum() method
 	 */
 	public static String knapsackOutputNoList(String filename, int[] w, int n, int limit) {
 		String s = filename + " " + limit + "\t";
@@ -108,22 +110,25 @@ public class Knapsack {
 	}
 	
 	/**
-	 * 
-	 * @param w
-	 * @param n
-	 * @param limit
-	 * @return
+	 * Calculates the largest combination of values in array w that is smaller than the given limit
+	 * @param w the list of int values to test the knapsack problem on
+	 * @param n the number of values in w to be used
+	 * @param limit the largest possible value that can be reached in calculating the knapsack problem
+	 * @return the largest sum of values in w that is less than limit
 	 */
 	public static int knapsackSum(int[] w, int n, int limit) {
-		if(limit < 0) return 0;
+		if(limit <= 0 || n < 1) return 0;
 		if(n == 1) {
-			return w[n-1] < limit ? w[n-1] : 0;
+			if(w[n-1] <= limit) {
+				return w[n-1];
+			}
+			return 0;
 		}
 		
 		int valueWith = knapsackSum(w, n - 1, limit - w[n - 1]);
 		int valueWithout = knapsackSum(w, n - 1, limit);
 		
-		if(valueWith > valueWithout) {
+		if(w[n-1] <= limit && valueWith + w[n-1] > valueWithout) {
 			return valueWith + w[n-1];
 		} else {
 			return valueWithout;
@@ -131,7 +136,8 @@ public class Knapsack {
 	}
 	
 	/**
-	 * 
+	 * Calculates the largest combination of values in array w that is smaller than the given limit
+	 * Adds the values used into the given List
 	 * @param w the array of weights
 	 * @param n the number of elements in w to be acknowledged in this method
 	 * @param limit the largest allowed total weight of objects in the "knapsack"
@@ -139,38 +145,24 @@ public class Knapsack {
 	 * @return the greatest sum of ints in w[] achievable without exceeding limit
 	 */
 	public static int knapsackSum(int[] w, int n, int limit, List<Integer> list) {
-		//System.out.println(n);
-		
-		if(limit <= 0 || n < 1) {
-			if(!list.isEmpty()) {
-				list.remove(0);
-			}
-			return 0;
-		}
+		if(limit <= 0 || n < 1) return 0;
 		if(n == 1) {
-			if(w[n-1] < limit) {
-				//list.add(w[n-1]);
+			if(w[n-1] <= limit) {
+				list.add(w[n-1]);
 				return w[n-1];
 			}
 			return 0;
 		}
 		
-		ArrayList<Integer> list1 = new ArrayList<Integer>(list);
+		ArrayList<Integer> list1 = new ArrayList<Integer>();//valueWith
 		list1.add(w[n-1]);
-		ArrayList<Integer> list2 = new ArrayList<Integer>(list);
+		ArrayList<Integer> list2 = new ArrayList<Integer>();//valueWithout
 		
-		int valueWith = 0;
-		int valueWithout = 0;
+		int valueWith = knapsackSum(w, n - 1, limit - w[n - 1], list1);
+		int valueWithout = knapsackSum(w, n - 1, limit, list2);
 		
-		//if(w[n-1] <= limit) {
-			valueWith = knapsackSum(w, n - 1, limit - w[n - 1], list1);
-			list1.add(w[n-1]);
-			valueWithout = knapsackSum(w, n - 1, limit, list2);
-			
-		//}
-		
-		if(valueWith > 0 && valueWith > valueWithout) {
-			
+		if(w[n-1] <= limit && valueWith + w[n-1] > valueWithout) {
+			//System.out.println("H");
 			list.addAll(list1);
 			return valueWith + w[n-1];
 			
