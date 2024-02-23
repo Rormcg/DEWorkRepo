@@ -13,7 +13,11 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	
 	//will evaluate the expression tree and return the answer
 	@Override
-	public int evalTree(TreeNode tree) {
+	public int evalTree() {
+		return evalTree(this);
+	}
+	
+	private int evalTree(TreeNode tree) {
 		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
 			return (int)tree.getValue();
 		}
@@ -27,7 +31,11 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	//TRAVERSALS//
 	//traverse the expression tree and return a string in the appropriate notation
 	@Override
-	public String toPrefixNotation(TreeNode tree) {
+	public String toPrefixNotation() {
+		return toPrefixNotation(this);
+	}
+	
+	private String toPrefixNotation(TreeNode tree) {
 //		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
 //			return tree.getValue().toString();
 //		}
@@ -35,7 +43,11 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	}
 
 	@Override
-	public String toInfixNotation(TreeNode tree) {
+	public String toInfixNotation() {
+		return toInfixNotation(this);
+	}
+	
+	private String toInfixNotation(TreeNode tree) {
 //		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
 //			return tree.getValue().toString();
 //		}
@@ -43,7 +55,11 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	}
 
 	@Override
-	public String toPostfixNotation(TreeNode tree) {
+	public String toPostfixNotation() {
+		return toPostfixNotation(this);
+	}
+	
+	private String toPostfixNotation(TreeNode tree) {
 //		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
 //			return tree.getValue().toString();
 //		}
@@ -79,6 +95,11 @@ public class ExpressionTree extends TreeNode implements Expressions {
 			}
 		}
 		return tree;
+	}
+	
+	public static ExpressionTree buildTreeStatic(String[] exp) {
+		ExpressionTree t = new ExpressionTree();
+		return t.buildTree(exp);
 	}
 	
 	

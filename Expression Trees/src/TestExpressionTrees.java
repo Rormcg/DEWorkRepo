@@ -21,14 +21,15 @@ public class TestExpressionTrees {
 		}
 		
 		//String postFixExpressions[] = new String[];
-		ArrayList<String> postfixExpressions = new ArrayList<String>();
+		ArrayList<String[]> postfixExpressions = new ArrayList<String[]>();
 		while(s.hasNext()) {
-			postfixExpressions.add(s.nextLine());
+			String str = s.nextLine();
+			postfixExpressions.add(str.split(" "));
 		}
-		//String[][] postfix = new String
+		//String[][] postfix = new String[][];
 		
-		for(String n : postfixExpressions) {
-			TreeNode t = ExpressionTree.buildTree(n);
+		for(String[] str : postfixExpressions) {
+			TreeNode t = ExpressionTree.buildTreeStatic(str);
 		}
 	}
 
