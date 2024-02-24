@@ -83,8 +83,8 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	private String toInfixNotation(TreeNode tree) {
 		String str = "";
 		if(tree.getLeft() != null)
-			str += toInfixNotation(tree.getLeft());		
-		str += " " + tree.getValue();
+			str += toInfixNotation(tree.getLeft()) + " ";		
+		str += tree.getValue();
 		if(tree.getRight() != null)
 			str += " " + toInfixNotation(tree.getRight());
 		return str;
@@ -107,10 +107,10 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	private String toPostfixNotation(TreeNode tree) {
 		String str = "";
 		if(tree.getLeft() != null)
-			str += toPostfixNotation(tree.getLeft());
+			str += toPostfixNotation(tree.getLeft()) + " ";
 		if(tree.getRight() != null)
-			str += " " + toPostfixNotation(tree.getRight());
-		return str + " " + tree.getValue();
+			str += toPostfixNotation(tree.getRight()) + " ";
+		return str + tree.getValue();
 	}
 	////
 	
