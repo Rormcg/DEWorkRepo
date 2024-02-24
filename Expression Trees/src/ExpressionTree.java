@@ -18,13 +18,12 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	}
 	
 	private int evalTree(TreeNode tree) {
-		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
-			return (int)tree.getValue();
-		}
-		if(tree.getValue() == "+") {
-			return (int)tree.getLeft().getValue() + (int)tree.getRight().getValue();
+		if(tree.getValue().equals("+")) {
+			return evalTree(tree.getLeft()) + evalTree(tree.getRight());
+		} else if(tree.getValue().equals("*")){
+			return evalTree(tree.getLeft()) * evalTree(tree.getRight());
 		} else {
-			return (int)tree.getLeft().getValue() * (int)tree.getRight().getValue();
+			return (int)tree.getValue();
 		}
 	}
 	
@@ -36,10 +35,12 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	}
 	
 	private String toPrefixNotation(TreeNode tree) {
-//		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
-//			return tree.getValue().toString();
-//		}
-		return tree.getValue() + " " + toPostfixNotation(tree.getLeft()) + " " + toPostfixNotation(tree.getRight());
+		String str = ""+tree.getValue();
+		if(tree.getLeft() != null)
+			str += " " + toPrefixNotation(tree.getLeft());
+		if(tree.getRight() != null)
+			str += " " + toPrefixNotation(tree.getRight());
+		return str;
 	}
 
 	@Override
@@ -48,10 +49,13 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	}
 	
 	private String toInfixNotation(TreeNode tree) {
-//		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
-//			return tree.getValue().toString();
-//		}
-		return toPostfixNotation(tree.getLeft()) + " " + tree.getValue() + " " + toPostfixNotation(tree.getRight());
+		String str = "";
+		if(tree.getLeft() != null)
+			str += toInfixNotation(tree.getLeft());		
+		str += " " + tree.getValue();
+		if(tree.getRight() != null)
+			str += " " + toInfixNotation(tree.getRight());
+		return str;
 	}
 
 	@Override
@@ -60,10 +64,12 @@ public class ExpressionTree extends TreeNode implements Expressions {
 	}
 	
 	private String toPostfixNotation(TreeNode tree) {
-//		if(!tree.getValue().equals("+") || !tree.getValue().equals("*")) {
-//			return tree.getValue().toString();
-//		}
-		return toPostfixNotation(tree.getLeft()) + " " + toPostfixNotation(tree.getRight()) + " " + tree.getValue();
+		String str = "";
+		if(tree.getLeft() != null)
+			str += toPostfixNotation(tree.getLeft());
+		if(tree.getRight() != null)
+			str += " " + toPostfixNotation(tree.getRight());
+		return str + " " + tree.getValue();
 	}
 	////
 	
@@ -77,24 +83,25 @@ public class ExpressionTree extends TreeNode implements Expressions {
 		
 		for(int i = 0; i < exp.length; i++) {
 			String n = exp[i].trim();
-			if(n == "*" || n == "+") {
+			if(n.equals("*") || n.equals("+")) {
 				tree = new ExpressionTree(n);
 				Object a = stack.pop(),
 						b = stack.pop();
-				if(!(a instanceof TreeNode)) {
-					a = new ExpressionTree(a);
-				}
-				if(!(b instanceof TreeNode)) {
-					b = new ExpressionTree(b);
-				}
 				tree.setRight((ExpressionTree)a);
 				tree.setLeft((ExpressionTree)b);
 				stack.push(tree);
 			} else {
+				try {
+					//System.out.println("H");
+					tree = new ExpressionTree(Integer.parseInt(n));
+				} catch (NumberFormatException e) {
+					throw new IllegalArgumentException("exp[" + i + "] contains an unexpected value");
+				}
 				stack.push(tree);
 			}
 		}
 		return tree;
+		//return stack.pop();
 	}
 	
 	public static ExpressionTree buildTreeStatic(String[] exp) {
