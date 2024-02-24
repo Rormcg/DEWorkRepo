@@ -4,12 +4,19 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+/**
+ * Testing Class for the ExpressionTrees Project for DE CSC
+ * Reads in a series of example expressions from input files, than prints the results to an output file
+ * @author Rory McGuire
+ */
 public class TestExpressionTrees {
 	
-//	public final static int
-//	MAXVAL = 30,
-//	MAXNODES = 10; 
-	
+	/**
+	 * The main entry method for the ExpressionTrees project testing
+	 * Reads in a series of example expressions from input files, than prints the results to an output file
+	 * @param args the input filename(optional); the output filename(optional)
+	 */
 	public static void main(String[] args) {
 		//READ IN INPUT
 		String filename = "postFixExpressions.txt";
@@ -84,6 +91,11 @@ public class TestExpressionTrees {
 		p.close();
 	}
 	
+	/**
+	 * Returns a String representation of a String array
+	 * @param arr the String array to be converted to a String
+	 * @return the String equivalent of the given array
+	 */
 	private static String printArr(String[] arr) {
 		String str = "[";
 		for(String s : arr) {
