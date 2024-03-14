@@ -47,7 +47,7 @@ public class TicTacToeHashCode extends Board {
 		int hash = 0;
 		while(position.length() > 0) {
 			hash += Integer.parseInt(position.substring(0,1)) * Math.pow(3, position.length() - 1);
-			position = position.substring(1);
+			position = position.substring(1); 
 		}
 		return hash;
 	}
