@@ -85,6 +85,7 @@ public class TicTacToeHashCode extends Board {
 				s += charAt(r, c);
 			}
 		}
+		//System.out.println(s);
 		return isWin(s);
 	}
 	
@@ -95,13 +96,13 @@ public class TicTacToeHashCode extends Board {
 	 */
 	public boolean isWin(String s) {
 		if(s.length() != 9) return false;
-		for(int i = 0; i < s.length(); i++) {
+		/*for(int i = 0; i < s.length(); i++) {
 			if(s.charAt(i) != '*' &&
 				s.charAt(i) != 'o' &&
 				s.charAt(i) != 'x') {
 				return false;
 			}
-		}
+		}*/
 		return winners[hashCode(s)];
 	}
 	
@@ -132,14 +133,15 @@ public class TicTacToeHashCode extends Board {
 		//Scanner kb = new Scanner(System.in);
 		
 		//while (true) {
-		while(sc.hasNext()) {
+		while(sc.hasNextLine()) {
 			//s = kb.nextLine();
-			s = sc.next();
+			s = sc.nextLine();
+			//System.out.println(board.winners[134]);
 			board.setBoardString(convertToBoardString(s));
 			board.setHashCodeLabel(board.myHashCode());
 			board.setWinner(board.isWin());
 			board.show(board.getBoardString());
-			System.out.println(s);
+			//System.out.println(s);
 			Thread.sleep(2000);
 			
 			

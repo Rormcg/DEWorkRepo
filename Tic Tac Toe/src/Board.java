@@ -225,7 +225,7 @@ abstract class Board extends JFrame implements ActionListener {
 				break;
 				case '0'  : letter = " "; 
 				break;
-				default : letter = "" + ch;
+				default : letter = " ";//"" + ch;
 				//xx: letter = " ";
 			}
 
