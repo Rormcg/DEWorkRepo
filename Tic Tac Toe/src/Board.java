@@ -10,10 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 
 /**
- * 
+ * Abstract class implementing JFrame.
+ * Is a JFrame containing a graphical representation of a tic tac toe board;
+ * displays its corresponding hashcode and whether it is a winner
  */
 abstract class Board extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private JButton buttons[][];
 	private JLabel lblHashCode;
 	private JLabel lblWinTitle;
@@ -87,7 +90,7 @@ abstract class Board extends JFrame implements ActionListener {
 		panel.setLayout(new GridLayout(TicTacToe.ROWS,TicTacToe.COLS));
 		buttons = new JButton[TicTacToe.ROWS][TicTacToe.COLS];
 
-		int count = 1;
+		//int count = 1;
 
 		for (int r = 0; r < TicTacToe.ROWS; r++) 
 			for (int c = 0; c < TicTacToe.COLS; c++) {
@@ -210,7 +213,7 @@ abstract class Board extends JFrame implements ActionListener {
 	 */
 	public void show(String s) {
 		int pos = 0;
-		String p = "";
+		//String p = "";
 		String letter;
 		for (int r = 0; r < TicTacToe.ROWS; r++)
 			for (int c = 0; c < TicTacToe.COLS && r*3+c < s.length(); c++){
@@ -222,17 +225,18 @@ abstract class Board extends JFrame implements ActionListener {
 				break;
 				case '0'  : letter = " "; 
 				break;
-				default : letter = "" + ch;                                                                                                                                                                                                                                                                                        xx: letter = " ";
+				default : letter = "" + ch;
+				//xx: letter = " ";
 			}
 
 				buttons[r][c].setText(letter);
-				p += letter;
+				//p += letter;
 				pos++;
 		}
 	}
 	
 	/**
-	 * resets boardString to the current actual board configuration
+	 * Resets boardString to the current actual board configuration
 	 */
 	public void resetBoardString() {
 		for (int r = 0; r < TicTacToe.ROWS; r++)

@@ -1,13 +1,24 @@
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Extends Board, and by extension JFrame.
+ * Completes the abstract Board class, filling in the missing methods
+ * for converting to a hashcode and checking for a win
+ * @author anonymous
+ * @author Rory McGuire
+ */
 public class TicTacToeHashCode extends Board {
 
+	private static final long serialVersionUID = 1L;
 	boolean [] winners;  // True if the hash string that maps to this index is a winner, false otherwise
-
+	
+	/**
+	 * Constructs an instance of the TicTacToeHashCode class with a given title.
+	 * Fills the winners array with boolean values: true for every configuration contained in winners.txt, false for others
+	 * @param s the title of this JFrame instance
+	 */
 	TicTacToeHashCode(String s) {
 		super(s);
 		winners = new boolean[(int)Math.pow(3, 9)];
@@ -29,8 +40,10 @@ public class TicTacToeHashCode extends Board {
 		}
 	}
 
-	// TODO - write the myHashCode function.  It must create a unique hashcode for all of the 
-	//   possible values the game board (3 ^ 9) and it MUST use the super.charAt(row, col) function
+	/**
+	 * Converts this board configuration to a hash value
+	 * @return the hash value for this's board configuration
+	 */
 	@Override
 	public int myHashCode() {
 		String s = "";
@@ -42,7 +55,12 @@ public class TicTacToeHashCode extends Board {
 		
 		return hashCode(s);
 	}
-		
+	
+	/**
+	 * Converts a given board configuration to a hash value
+	 * @param position the board configuration to be converted to a hash
+	 * @return the hash value for the given board configuration
+	 */
 	public static int hashCode(String position) {
 		if(position.length() != 9) return 0;
 		
@@ -56,6 +74,10 @@ public class TicTacToeHashCode extends Board {
 		return hash;
 	}
 	
+	/**
+	 * Checks whether this board is a winner found within the winners array
+	 * @return whether this board is found within the winners array (true if it is a valid win)
+	 */
 	public boolean isWin() {
 		String s = "";
 		for(int r = 0; r < 3; r++) {
@@ -65,7 +87,12 @@ public class TicTacToeHashCode extends Board {
 		}
 		return isWin(s);
 	}
-
+	
+	/**
+	 * Checks whether a given board is a winner found within the winners array
+	 * @param s the board configuration to be analyzed
+	 * @return whether a given board is found within the winners array (true if it is a valid win)
+	 */
 	public boolean isWin(String s) {
 		if(s.length() != 9) return false;
 		for(int i = 0; i < s.length(); i++) {
@@ -78,8 +105,11 @@ public class TicTacToeHashCode extends Board {
 		return winners[hashCode(s)];
 	}
 	
-	
-
+	/**
+	 * Scans the input file TTT_tests.txt and displays each board configuration on a TicTacToeHashCode instance
+	 * @param args the command line input arguments for this method. Ignored in this implementation.
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		TicTacToeHashCode board = new TicTacToeHashCode ("Tic Tac Toe");
 		
@@ -117,7 +147,6 @@ public class TicTacToeHashCode extends Board {
 			//  String currentBoard = board.boardValues[(int)(Math.random()* board.boardValues.length)];
 			//  board.show(currentBoard);
 			board.setHashCodeLabel(board.myHashCode());
-			// TODO Update this line to call your isWin method.
 			//  board.setWinner(TicTacToe.isWin(currentBoard));
 			//  TicTacToe ttt = new TicTacToe();
 			//  System.out.println(ttt.isWin(s));
