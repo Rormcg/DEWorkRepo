@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.TreeSet;
 
 /**
  * Extends Board, and by extension JFrame.
@@ -13,6 +15,7 @@ public class TTT_HC extends Board {
 
 	private static final long serialVersionUID = 1L;
 	boolean [] winners;  // True if the hash string that maps to this index is a winner, false otherwise
+	ArrayList<TreeSet<String>> winnersChained; //Array of containers for each hash to resolve collisions
 	
 	/**
 	 * Constructs an instance of the TicTacToeHashCode class with a given title.
@@ -21,7 +24,16 @@ public class TTT_HC extends Board {
 	 */
 	TTT_HC(String s) {
 		super(s);
-		winners = new boolean[(int)Math.pow(3, 9) % 1000 + 1000];
+		//Total items (boards): 19683
+		//Size of array: 667
+		//Load Factor: 29.5
+		winners = new boolean[666];
+		
+		//Use chaining to resolve hash collisions
+		winnersChained = new ArrayList<TreeSet<String>> ();
+		for(int i = 0; i < winnersChained.size(); i++) {
+			winnersChained.set(i, new TreeSet<String>());
+		}
 		
 		Scanner sc = null;
 		File f = new File("winners.txt");
@@ -36,7 +48,9 @@ public class TTT_HC extends Board {
 			winners[i] = false;
 		}
 		while(sc.hasNextLine()) {
-			winners[tTTHashCode(sc.nextLine())] = true;
+			String line = sc.nextLine()+"";
+			winners[tTTHashCode(line)] = true;
+			winnersChained.get(tTTHashCode(line)).add(line);
 		}
 	}
 	
@@ -57,6 +71,7 @@ public class TTT_HC extends Board {
 			}
 		}
 		
+		
 		return tTTHashCode(s);
 	}
 	
@@ -73,15 +88,12 @@ public class TTT_HC extends Board {
 		
 		position = convertToBoardString(position);
 		String front = position.substring(0, 4);
-		int hash = 0;
-		while(position.length() > 0) {
-			hash += Integer.parseInt(position.substring(0,1)) * Math.pow(3, position.length() - 1);
-			position = position.substring(1); 
-		}
-		//Reduces the maximum value of hash to 1683, thus reducing the size issue of the previously huge range (0-19683)
-		return (hash % 1000) + (hash > 10000 ? 1000 : 0);
+		//add the first third to the middle third and finally to the last third of the String
+		//Should give a number between 0-666
+		int hash = Integer.parseInt(position.substring(0, 3)) + Integer.parseInt(position.substring(3, 6)) + Integer.parseInt(position.substring(6, 9));
 		
-		/*vvTOO LARGE HASHvv*/
+		return hash;
+		/*vv~TOO LARGE HASH~vv*/
 		/*if(position.length() != 9) return 0;
 		
 		position = convertToBoardString(position);
@@ -131,13 +143,13 @@ public class TTT_HC extends Board {
 	public boolean isWin(String s) {
 		if(s.length() != 9) return false;
 		
-		return winners[tTTHashCode(s)];
+		return winners[tTTHashCode(s)] && winnersChained.get(tTTHashCode(s)).contains(s);
 	}
 	
 	/**
 	 * 
 	 */
 	public static void main(String[] args) throws InterruptedException {
-		System.out.println((int)Math.pow(3, 9) % 1000 + 1000);
+
 	}
 }
