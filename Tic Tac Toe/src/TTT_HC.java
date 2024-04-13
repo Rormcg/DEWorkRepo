@@ -158,7 +158,23 @@ public class TTT_HC extends Board {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		TTT_HC board = new TTT_HC("Tic Tac Toe");
-
+		
+		
+		//Calculate Chaining Stats
+		int totalChains = 0; //number of chains of length > 1
+		int greatestChain = 0; //lenght of the largest chain
+		for(int i = 0; i < board.winnersChained.size(); i++) {
+			if(board.winnersChained.get(i).size() > 1) {
+				totalChains ++;
+				if(board.winnersChained.get(i).size() > greatestChain) {
+					greatestChain = board.winnersChained.get(i).size();
+				}
+			}
+		}
+		System.out.println("total chains: " + totalChains +
+							"\ngreatest chain length: " + greatestChain);
+		
+		
 		Scanner sc = null;
 		File f = new File("TTT_Tests.txt");
 		
