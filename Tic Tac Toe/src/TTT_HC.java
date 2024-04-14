@@ -1,3 +1,5 @@
+
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,8 +9,8 @@ import java.util.TreeSet;
 /**
  * Extends Board, and by extension JFrame.
  * Completes the abstract Board class, filling in the missing methods
- * for converting to a hashcode and checking for a win.
- * Similare to TicTacToeHashCode, but instead of a 1-to-1 hash, this hash is much smaller with collisions
+ * for converting to a hashCode and checking for a win.
+ * Similar to TicTacToeHashCode, but instead of a 1-to-1 hash, this hash is much smaller with collisions
  * @author anonymous
  * @author Rory McGuire
  */

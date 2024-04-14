@@ -1,4 +1,6 @@
 
+
+
 /**
  * Class containing series of static methods to be used with manipulating Tic Tac Toe board configurations.
  * Includes methods for converting configurations and checking if they are valid or winning positions.

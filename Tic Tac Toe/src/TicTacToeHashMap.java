@@ -1,3 +1,5 @@
+
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -7,11 +9,17 @@ import java.util.Scanner;
 /**
  * @author unknown/anonymous
  * @author Rory McGuire
+ * Breaks down a HashMap in order to determine its efficacy at hashing and storing data,
+ * to then compare the results with another method
  */
 public class TicTacToeHashMap {
 
 	private HashMap<String, Boolean> winners;
 	
+	/**
+	 * Instantiates a TicTacToeHashMap instance.
+	 * Fills the winners HashMap with values from winners.txt
+	 */
 	TicTacToeHashMap() {
 		// load values
 		
@@ -36,8 +44,12 @@ public class TicTacToeHashMap {
 		}
 	}
 
-
-
+	/**
+	 * Finds and returns the capacity (available space) of the winners HashMap
+	 * @return the capacity of the HashMap
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private int capacity() throws NoSuchFieldException, IllegalAccessException {
 		Field tableField = HashMap.class.getDeclaredField("table");
 		tableField.setAccessible(true);
@@ -45,6 +57,14 @@ public class TicTacToeHashMap {
 		return table == null ? 0 : table.length;   
 	}
 	
+	/**
+	 * Finds and returns the distribution of values in the winners HashMap array of entries.
+	 * Returns in the form of an int array of length 4, so that each index has the number of key-value pairs in
+	 * the corresponding quarter of the array 
+	 * @return the distribution of entries in the winners array in the form of a 4-part int[]
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private int[] entryDistribution() throws NoSuchFieldException, IllegalAccessException{
 		int[] quarters = new int[4];
 		for(int i = 0; i < quarters.length; i++) {
@@ -69,7 +89,7 @@ public class TicTacToeHashMap {
 				
 				//depending on where this chain falls in the array, add its number of entries to quarters
 				for(int j = 0; j < quarters.length; j++) {
-					if(i < table.length * ((j+1)/(quarters.length*1.0)) && currentLength > 1) {
+					if(i < table.length * ((j+1)/(quarters.length*1.0))) {
 						quarters[j] += currentLength;
 						break;
 					}
@@ -80,6 +100,14 @@ public class TicTacToeHashMap {
 		return quarters;
 	}
 	
+	/**
+	 * Finds and returns the distribution of collisions in the winners HashMap array of entries.
+	 * Returns in the form of an int array of length 10, so that each index has the number of collisions 
+	 * (defined as every key after the first in each chain) in the corresponding tenth of the array 
+	 * @return the distribution of collisions in the winners array in the form of a 10-part int[]
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private int[] collisionDistribution() throws NoSuchFieldException, IllegalAccessException{
 		int[] tenths = new int[10];
 		for(int i = 0; i < tenths.length; i++) {
@@ -114,7 +142,13 @@ public class TicTacToeHashMap {
 		
 		return tenths;
 	}
-
+	
+	/**
+	 * Finds and returns the length of the longest chain in the winners HashMap array of chains
+	 * @return the longest chain length in the HashMap
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private int maxChainLength() throws NoSuchFieldException, IllegalAccessException{
 		int max = 0;
 		
@@ -140,6 +174,12 @@ public class TicTacToeHashMap {
 		return max;
 	}
 	
+	/**
+	 * Finds and returns the  average length all chains with length > 1 in the winners HashMap array of chains
+	 * @return the average chain length in the HashMap
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private double averageChainLength() throws NoSuchFieldException, IllegalAccessException{
 		//Counting chains of length > 1 only
 		int total = 0;
@@ -168,6 +208,12 @@ public class TicTacToeHashMap {
 		return (double)total / numChains;
 	}
 	
+	/**
+	 * Finds and returns the loadFactor of the winners HashMap
+	 * @return the loadFactor of the HashMap
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
 	private float loadFactor() throws NoSuchFieldException, IllegalAccessException{
 		Field tableLoadFactor = HashMap.class.getDeclaredField("loadFactor");
 		tableLoadFactor.setAccessible(true);
@@ -175,15 +221,19 @@ public class TicTacToeHashMap {
 		return loadFactor; 
 	}
 	
-	public static void main(String[] args) throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException {
+	/**
+	 * Runs each of the methods of this class to analyze the winners HashMap and prints out the results
+	 * @param args not used in this implementation
+	 * @throws java.io.FileNotFoundException
+	 * @throws NoSuchFieldException
+	 * @throws IllegalAccessException
+	 */
+	public static void main(String[] args) throws NoSuchFieldException, IllegalAccessException {
 
 		TicTacToeHashMap m = new TicTacToeHashMap();
 
-		// TODO read in and store the strings in your hashmap, then close the file
 
-		// TODO print out the capacity using the capacity() method
 		System.out.println("Capacity: " + m.capacity());
-		// TODO print out the other analytical statistics as required in the assignment
 		System.out.println("Load Factor: " + m.loadFactor());
 		System.out.println("Max Chain Length: " + m.maxChainLength());
 		System.out.println("Average Chain Length (Ignoring chains of length < 1): " + m.averageChainLength());
