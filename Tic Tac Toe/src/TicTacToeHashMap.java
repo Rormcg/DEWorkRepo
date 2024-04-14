@@ -10,11 +10,9 @@ import java.util.Scanner;
  */
 public class TicTacToeHashMap {
 
-// TODO Define a hash map to store the winning strings as Key and true as Value
 	private HashMap<String, Boolean> winners;
 	
 	TicTacToeHashMap() {
-		// TODO Instantiate/fill your HashMap ... pay attention to initial capacity and
 		// load values
 		
 		int numWins = 1400; //the number of winning boards in winners.txt
@@ -38,34 +36,171 @@ public class TicTacToeHashMap {
 		}
 	}
 
-// TODO This method uses reflect to investigae the objects inside the HashMap
-// You should be able to update this with your information and determine 
-// Information about capacity (different than size()) and what is stored in the cells
+
 
 	private int capacity() throws NoSuchFieldException, IllegalAccessException {
-      Field tableField = HashMap.class.getDeclaredField("table");
-      tableField.setAccessible(true);
-      Object[] table = (Object[]) tableField.get(##YOUR HASH MAP HERE ##);
-      return table == null ? 0 : table.length;   
-   }
+		Field tableField = HashMap.class.getDeclaredField("table");
+		tableField.setAccessible(true);
+		Object[] table = (Object[]) tableField.get(winners);
+		return table == null ? 0 : table.length;   
+	}
+	
+	private int[] entryDistribution() throws NoSuchFieldException, IllegalAccessException{
+		int[] quarters = new int[4];
+		for(int i = 0; i < quarters.length; i++) {
+			quarters[i] = 0;
+		}
+		
+		Field tableField = HashMap.class.getDeclaredField("table");
+		tableField.setAccessible(true);
+		Object[] table = (Object[]) tableField.get(winners);
+		for(int i = 0; i < table.length; i++) {
+			if(table[i] != null) {
+				
+				Field element = table[i].getClass().getDeclaredField("next");
+				element.setAccessible(true);
+				Object nextNode = table[i];
+				int currentLength = 0;
+				while(nextNode != null) {
+					currentLength ++;
+					
+					nextNode = (Object) element.get(nextNode);
+				}
+				
+				//depending on where this chain falls in the array, add its number of entries to quarters
+				for(int j = 0; j < quarters.length; j++) {
+					if(i < table.length * ((j+1)/(quarters.length*1.0)) && currentLength > 1) {
+						quarters[j] += currentLength;
+						break;
+					}
+				}
+			}
+		}
+		
+		return quarters;
+	}
+	
+	private int[] collisionDistribution() throws NoSuchFieldException, IllegalAccessException{
+		int[] tenths = new int[10];
+		for(int i = 0; i < tenths.length; i++) {
+			tenths[i] = 0;
+		}
+		
+		Field tableField = HashMap.class.getDeclaredField("table");
+		tableField.setAccessible(true);
+		Object[] table = (Object[]) tableField.get(winners);
+		for(int i = 0; i < table.length; i++) {
+			if(table[i] != null) {
+				
+				Field element = table[i].getClass().getDeclaredField("next");
+				element.setAccessible(true);
+				Object nextNode = table[i];
+				int currentLength = 0;
+				while(nextNode != null) {
+					currentLength ++;
+					
+					nextNode = (Object) element.get(nextNode);
+				}
+				
+				//depending on where this chain falls in the array, add its number of collisions (#entries - 1) to tenths
+				for(int j = 0; j < tenths.length; j++) {
+					if(i < table.length * ((j+1)/(tenths.length*1.0)) && currentLength > 1) {
+						tenths[j] += currentLength - 1;
+						break;
+					}
+				}
+			}
+		}
+		
+		return tenths;
+	}
 
-	// TODO using the same code to get the table of entries as in the capacity
-	// method,
-	// create a method that will evaluate the table as directed in the assignment.
-	// note - if an entry is not null, then it has a value, it may have more than
-	// one value
-	// see if you can determine how many values it has. Using the debugger will
-	// assist.
-
-	public static void main(String[] args)
-			throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException {
+	private int maxChainLength() throws NoSuchFieldException, IllegalAccessException{
+		int max = 0;
+		
+		Field tableField = HashMap.class.getDeclaredField("table");
+		tableField.setAccessible(true);
+		Object[] table = (Object[]) tableField.get(winners);
+		for(int i = 0; i < table.length; i++) {
+			if(table[i] != null) {
+				
+				Field element = table[i].getClass().getDeclaredField("next");
+				element.setAccessible(true);
+				Object nextNode = table[i];
+				int currentLength = 0;
+				while(nextNode != null) {
+					currentLength ++;
+					if(max < currentLength) {
+						max = currentLength;
+					}
+					nextNode = (Object) element.get(nextNode);
+				}
+			}
+		}
+		return max;
+	}
+	
+	private double averageChainLength() throws NoSuchFieldException, IllegalAccessException{
+		//Counting chains of length > 1 only
+		int total = 0;
+		int numChains = 0;
+		
+		Field tableField = HashMap.class.getDeclaredField("table");
+		tableField.setAccessible(true);
+		Object[] table = (Object[]) tableField.get(winners);
+		for(int i = 0; i < table.length; i++) {
+			if(table[i] != null) {
+				
+				Field element = table[i].getClass().getDeclaredField("next");
+				element.setAccessible(true);
+				Object nextNode = table[i];
+				int currentLength = 0;
+				while(nextNode != null) {
+					currentLength ++;
+					nextNode = (Object) element.get(nextNode);
+				}
+				if(currentLength > 1) {
+					total += currentLength;
+					numChains ++;
+				}
+			}
+		}
+		return (double)total / numChains;
+	}
+	
+	private float loadFactor() throws NoSuchFieldException, IllegalAccessException{
+		Field tableLoadFactor = HashMap.class.getDeclaredField("loadFactor");
+		tableLoadFactor.setAccessible(true);
+		float loadFactor = (float) tableLoadFactor.get(winners);
+		return loadFactor; 
+	}
+	
+	public static void main(String[] args) throws java.io.FileNotFoundException, NoSuchFieldException, IllegalAccessException {
 
 		TicTacToeHashMap m = new TicTacToeHashMap();
 
 		// TODO read in and store the strings in your hashmap, then close the file
 
 		// TODO print out the capacity using the capacity() method
+		System.out.println("Capacity: " + m.capacity());
 		// TODO print out the other analytical statistics as required in the assignment
+		System.out.println("Load Factor: " + m.loadFactor());
+		System.out.println("Max Chain Length: " + m.maxChainLength());
+		System.out.println("Average Chain Length (Ignoring chains of length < 1): " + m.averageChainLength());
+		
+		int[] dist = m.entryDistribution();
+		System.out.println("Entry Distribution By Quarters of the Array:");
+		for(int i = 0; i < dist.length; i++) {
+			System.out.println((i+1) + ": " + dist[i]);
+		}
+		
+		int[] dist2 = m.collisionDistribution();
+		System.out.println("Collision Distribution By Tenths of the Array:");
+		for(int i = 0; i < dist2.length; i++) {
+			System.out.println((i+1) + ": " + dist2[i]);
+		}
+		
+		//System.out.println("Capacity: " + m.capacity());
 
 	}
 
