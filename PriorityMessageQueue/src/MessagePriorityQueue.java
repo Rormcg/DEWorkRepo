@@ -40,13 +40,13 @@ public class MessagePriorityQueue {
 	public void processNext() {
 		for(int i = 0; i < messages.size(); i++) {
 			if(messages.get(i).size() > 0) {
-				processedMessage = messages.get(i).remove(0);
+				processedMessage = messages.get(i).remove();
 				processingTime = PROCESS_TIME - 1;
 			}
 		}
 	}
 	
-	public void update() {
+	public Message update() {
 		for(int i = 0; i < messages.size(); i++) {
 			for(int j = 0; j < messages.get(i).size(); i++) {
 				messages.get(i).get(j).increment();
@@ -54,9 +54,12 @@ public class MessagePriorityQueue {
 		}
 		
 		if(processingTime <= 0) {
+			Message temp = processedMessage;
 			processNext();
+			return temp;
 		} else {
 			processingTime --;
 		}
+		return null;
 	}
 }
