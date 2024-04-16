@@ -12,6 +12,14 @@ public class Message {
 		arrival = 0;
 	}
 	
+	/**
+	 * Increments arrival by one 
+	 * (represents one additional minute passing before this Message has been delivered)
+	 */
+	public void increment() {
+		arrival ++;
+	}
+	
 	public int getPriority() {
 		return priority;
 	}

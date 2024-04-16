@@ -224,7 +224,6 @@ public class TicTacToeHashMap {
 	/**
 	 * Runs each of the methods of this class to analyze the winners HashMap and prints out the results
 	 * @param args not used in this implementation
-	 * @throws java.io.FileNotFoundException
 	 * @throws NoSuchFieldException
 	 * @throws IllegalAccessException
 	 */
