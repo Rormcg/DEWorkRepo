@@ -22,9 +22,16 @@ public class MessagePriorityQueue {
 		for(int i = 0; i <= Message.MAX_P; i ++) {
 			messages.add(new LinkedList<Message>());
 		}
-		
+		addRandom(mes);
 		processingTime = 0;
 		processedMessage = null;
+	}
+	
+	/**
+	 * 
+	 */
+	public MessagePriorityQueue() {
+		this(0);
 	}
 	
 	public void addMessage(Message m) {
@@ -42,13 +49,18 @@ public class MessagePriorityQueue {
 			if(messages.get(i).size() > 0) {
 				processedMessage = messages.get(i).remove();
 				processingTime = PROCESS_TIME - 1;
+				return;
 			}
 		}
 	}
 	
+	/**
+	 * 
+	 * @return the Message that was processed. If no message was processed, return null
+	 */
 	public Message update() {
 		for(int i = 0; i < messages.size(); i++) {
-			for(int j = 0; j < messages.get(i).size(); i++) {
+			for(int j = 0; j < messages.get(i).size(); j++) {
 				messages.get(i).get(j).increment();
 			}
 		}
@@ -59,7 +71,20 @@ public class MessagePriorityQueue {
 			return temp;
 		} else {
 			processingTime --;
+			processedMessage.increment();
 		}
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @return the number of remaining elements in the messages array
+	 */
+	public int remaining() {
+		int sum = 0;
+		for(int i = 0; i < messages.size(); i++) {
+			sum += messages.get(i).size();
+		}
+		return sum;
 	}
 }

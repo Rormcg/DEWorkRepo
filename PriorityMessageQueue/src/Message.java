@@ -20,6 +20,14 @@ public class Message {
 		arrival ++;
 	}
 	
+	/**
+	 * Increments arrival by a given amount 
+	 * (represents additional minutes passing before this Message has been delivered)
+	 */
+	public void increment(int a) {
+		arrival += a;
+	}
+	
 	public int getPriority() {
 		return priority;
 	}
