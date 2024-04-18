@@ -1,7 +1,7 @@
 /**
  * @author Rory McGuire
  */
-public class Message {
+public class Message implements Comparable<Message>{
 	public static final int MAX_P = 4; //Priority goes from 0 -> MAX_P
 	private int arrival;
 	private int priority;
@@ -10,6 +10,11 @@ public class Message {
 	public Message(int p) {
 		priority = p;
 		arrival = 0;
+	}
+	
+	@Override
+	public int compareTo(Message m) {
+		return getPriority() - m.getPriority();
 	}
 	
 	/**

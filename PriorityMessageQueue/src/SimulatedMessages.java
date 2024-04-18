@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * @author Rory McGuire
  */
-public class SimulatedMessages {
+public class SimulatedMessages extends MessageQueue{
 	
 	/**
 	 * Run a simulated transmission of messages to a receiving MessagePriorityQueue
@@ -35,6 +35,23 @@ public class SimulatedMessages {
 		}
 		
 		printResults(queue, arrivals);
+	}
+	
+	public static void sim(int iterations, MessageHeap heap) {
+		ArrayList<ArrayList<Integer>> arrivals = new ArrayList<ArrayList<Integer>> ();
+		for(int i = 0; i <= Message.MAX_P; i++) {
+			arrivals.add(new ArrayList<Integer>());
+		}
+		
+		for(int i = 0; i < iterations; i++) {
+			if(Math.random() < 0.2) {
+				heap.addRandom(1);
+			}
+			
+			advanceTime(heap, arrivals);
+		}
+		
+		printResults(heap, arrivals);
 	}
 	
 	private static void printResults(MessagePriorityQueue queue, ArrayList<ArrayList<Integer>> arrivals) {

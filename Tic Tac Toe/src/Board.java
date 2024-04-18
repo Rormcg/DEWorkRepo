@@ -16,7 +16,7 @@ import javax.swing.BoxLayout;
  * Is a JFrame containing a graphical representation of a tic tac toe board;
  * displays its corresponding hashcode and whether it is a winner
  */
-abstract class Board extends JFrame implements ActionListener {
+public abstract class Board extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	private JButton buttons[][];
