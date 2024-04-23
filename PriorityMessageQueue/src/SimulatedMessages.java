@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * @author Rory McGuire
  */
-public class SimulatedMessages extends MessageQueue{
+public class SimulatedMessages {
 	
 	/**
 	 * Run a simulated transmission of messages to a receiving MessagePriorityQueue
