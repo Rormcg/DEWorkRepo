@@ -5,9 +5,6 @@ import java.util.LinkedList;
  * @author Rory McGuire
  */
 public class MessagePriorityQueue extends MessageQueue{
-	public static final int PROCESS_TIME = 4; //number of minutes/iterations a message takes to be processed
-											//(including the iteration on which it is initially selected
-	
 	private  ArrayList<LinkedList<Message>> messages;
 	
 	private int processingTime;

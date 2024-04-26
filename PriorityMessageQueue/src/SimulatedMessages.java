@@ -15,12 +15,13 @@ public class SimulatedMessages {
 		System.out.println("Number of Preloaded Messages: " + preloaded + "\nNumber of \"Minutes\" conducted: " + iterations);
 		
 		MessagePriorityQueue queue = new MessagePriorityQueue(preloaded);
-		
+		MessageHeap heap = new MessageHeap(preloaded);
 		
 		sim(iterations, queue);
+		sim(iterations, heap);
 	}
 	
-	public static void sim(int iterations, MessagePriorityQueue queue) {
+	public static void sim(int iterations, MessageQueue queue) {
 		ArrayList<ArrayList<Integer>> arrivals = new ArrayList<ArrayList<Integer>> ();
 		for(int i = 0; i <= Message.MAX_P; i++) {
 			arrivals.add(new ArrayList<Integer>());
@@ -37,24 +38,7 @@ public class SimulatedMessages {
 		printResults(queue, arrivals);
 	}
 	
-	public static void sim(int iterations, MessageHeap heap) {
-		ArrayList<ArrayList<Integer>> arrivals = new ArrayList<ArrayList<Integer>> ();
-		for(int i = 0; i <= Message.MAX_P; i++) {
-			arrivals.add(new ArrayList<Integer>());
-		}
-		
-		for(int i = 0; i < iterations; i++) {
-			if(Math.random() < 0.2) {
-				heap.addRandom(1);
-			}
-			
-			advanceTime(heap, arrivals);
-		}
-		
-		printResults(heap, arrivals);
-	}
-	
-	private static void printResults(MessagePriorityQueue queue, ArrayList<ArrayList<Integer>> arrivals) {
+	private static void printResults(MessageQueue queue, ArrayList<ArrayList<Integer>> arrivals) {
 		System.out.println("Average Arrival Times for each priority:");
 		double[] averages = averageArrivals(arrivals);
 		for(int i = 0; i < averages.length; i++) {
@@ -78,7 +62,7 @@ public class SimulatedMessages {
 		return ave;
 	}
 	
-	private static void advanceTime(MessagePriorityQueue m, ArrayList<ArrayList<Integer>> arr) {
+	private static void advanceTime(MessageQueue m, ArrayList<ArrayList<Integer>> arr) {
 		/*For Real Time:
 		try {
 			Thread.sleep(minutes * 60000);

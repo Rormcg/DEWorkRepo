@@ -1,4 +1,6 @@
+
 /**
+ * 
  * @author Rory McGuire
  */
 public class Message implements Comparable<Message>{
@@ -39,5 +41,9 @@ public class Message implements Comparable<Message>{
 	
 	public int getArrival() {
 		return arrival;
+	}
+	
+	public String toString() {
+		return "Priority: " + priority + ", Arrival Time: " + arrival;
 	}
 }

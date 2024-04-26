@@ -7,9 +7,6 @@ import java.util.PriorityQueue;
  *         compare the two
  */
 public class MessageHeap extends MessageQueue{
-	public static final int PROCESS_TIME = 4; // number of minutes/iterations a message takes to be processed
-	// (including the iteration on which it is initially selected
-
 	private PriorityQueue<Message> messages;
 
 	private int processingTime;
