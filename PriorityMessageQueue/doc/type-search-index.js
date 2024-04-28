@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"<Unnamed>","l":"Message"},{"p":"<Unnamed>","l":"MessageHeap"},{"p":"<Unnamed>","l":"MessagePriorityQueue"},{"p":"<Unnamed>","l":"MessageQueue"},{"p":"<Unnamed>","l":"SimulatedMessages"}];updateSearchResults();
