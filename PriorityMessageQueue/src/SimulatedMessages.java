@@ -44,13 +44,13 @@ public class SimulatedMessages {
 		double[] averagesQ = new double[Message.MAX_P + 1];
 		for(int i = 0; i < simulations; i++) {
 			MessageHeap h = new MessageHeap(preloaded);
-			double[] tempH = simToCompletion(h, false);
-			//double[] tempH = sim(iterations, h, false);
+			//double[] tempH = simToCompletion(h, false);
+			double[] tempH = sim(iterations, h, false);
 
 			
 			MessagePriorityQueue q = new MessagePriorityQueue(preloaded);
-			//double[] tempQ = sim(iterations, q, false);
-			double[] tempQ = simToCompletion(q, false);
+			double[] tempQ = sim(iterations, q, false);
+			//double[] tempQ = simToCompletion(q, false);
 			for(int j = 0; j < averagesH.length; j++) {
 				averagesH[j] += tempH[j];
 				averagesQ[j] += tempQ[j];
