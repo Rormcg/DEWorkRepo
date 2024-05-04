@@ -39,7 +39,7 @@ public class SimulatedMessages {
 		heap = new MessageHeap(preloaded);
 		sim(iterations, heap, true);
 		
-		System.out.println("Run " + simulations + " simulations:");
+		System.out.println("\nRun " + simulations + " simulations:");
 		double[] averagesH = new double[Message.MAX_P + 1];
 		double[] averagesQ = new double[Message.MAX_P + 1];
 		for(int i = 0; i < simulations; i++) {
