@@ -46,6 +46,6 @@ public class ChessSquarePanel extends JPanel {
 	}
 	
 	public String toString() {
-		return "ChessSquare Panel- isLight: " + isLight + ", hasQueen: " + hasQueen;
+		return "ChessSquarePanel- isLight: " + isLight + ", hasQueen: " + hasQueen;
 	}
 }

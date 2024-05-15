@@ -3,8 +3,11 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class ChessBoard extends JFrame{
-	public final int W = 8, L = 8; //number of squares long/wide
+public class ChessBoard extends JFrame {
+	private static final long serialVersionUID = 1L;
+
+
+	public static final int W = 8, L = 8; //number of squares long/wide
 	
 	
 	private ChessSquarePanel[][] squares;
@@ -20,11 +23,11 @@ public class ChessBoard extends JFrame{
 				board.add(squares[r][c] = new ChessSquarePanel((r * (L + 1) + c) % 2 == 0 ? true : false , false));
 			}
 		}
-		
 		getContentPane().add(board);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
 		setSize(W * ChessSquarePanel.SIZE, L * ChessSquarePanel.SIZE);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 	
@@ -37,7 +40,7 @@ public class ChessBoard extends JFrame{
 		for(int r = 0; r < L; r++) {
 			for(int c = 0; c < W; c ++) {
 				squares[r][c].setHasQueen(s.length() > c && Integer.parseInt(s.charAt(c)+"") == r ? true : false);
-				System.out.println(r + ", " + c);
+				//System.out.println(r + ", " + c);
 			}
 		}
 		repaint();
