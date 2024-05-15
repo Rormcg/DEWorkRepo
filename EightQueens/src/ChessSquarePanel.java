@@ -18,9 +18,9 @@ public class ChessSquarePanel extends JPanel {
 	private boolean isLight, hasQueen;
 	
 	/**
-	 * 
-	 * @param light
-	 * @param queen
+	 * Instantiate a ChessSquarePanel object as a light or dark square with or without a queen
+	 * @param light whether the new square is a light square
+	 * @param queen whether the new square has a queen
 	 */
 	ChessSquarePanel(boolean light, boolean queen) {
 		super();
@@ -31,8 +31,8 @@ public class ChessSquarePanel extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param
+	 * Paints this JPanel as a colored square with a queen (if any)
+	 * @param g the Graphics object on which this JPanel will be drawn
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
