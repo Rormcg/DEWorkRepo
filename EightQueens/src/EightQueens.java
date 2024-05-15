@@ -9,7 +9,6 @@ public class EightQueens {
 		
 		//ChessBoard b = new ChessBoard("35716024");
 		ChessBoard b = new ChessBoard();
-
 		
 		findAllSolutions();
 		
